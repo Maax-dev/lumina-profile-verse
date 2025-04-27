@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -57,7 +58,6 @@
     @apply bg-background text-foreground relative overflow-x-hidden;
   }
 
-  /* UCLA themed background with flowing gradient */
   body::before {
     content: '';
     position: fixed;
@@ -202,7 +202,7 @@
 
 @keyframes fall {
   0% {
-    transform: translateY(-100px) rotate(-45deg);
+    transform: translateY(-80px) rotate(-35deg);
     opacity: 0;
   }
   70% {
@@ -210,7 +210,7 @@
     opacity: 1;
   }
   85% {
-    transform: translateY(-10px) rotate(5deg);
+    transform: translateY(-5px) rotate(5deg);
   }
   100% {
     transform: translateY(0) rotate(0deg);

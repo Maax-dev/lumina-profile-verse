@@ -17,11 +17,15 @@ const Index = () => {
         <div className="space-y-4">
           <h1 className="text-8xl md:text-9xl font-bold animate-bounce-slow relative">
             <span className="bg-gradient-to-r from-ucla-blue via-ucla-gold to-ucla-blue bg-clip-text text-transparent bg-[length:200%_200%] animate-shimmer">
-              Grad
-              <GraduationCap 
-                className="inline-block absolute -top-14 text-ucla-gold animate-[fall_1.5s_ease-in-out_forwards]" 
-                strokeWidth={1.5}
-              />
+              Gra
+              <span className="relative">
+                d
+                <GraduationCap 
+                  className="absolute -top-12 left-1/2 -translate-x-1/2 text-ucla-gold animate-[fall_1.5s_ease-in-out_forwards]" 
+                  strokeWidth={1.5}
+                  size={32}
+                />
+              </span>
               Net
             </span>
           </h1>
