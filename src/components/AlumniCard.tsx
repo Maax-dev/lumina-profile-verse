@@ -31,14 +31,14 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
   return (
     <HoverCard openDelay={200}>
       <HoverCardTrigger asChild>
-        <Card className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer bg-card/50 backdrop-blur-sm border border-primary/10 rounded-xl overflow-hidden">
+        <Card className="group relative transform transition-all duration-500 ease-in-out hover:scale-110 hover:z-10 hover:shadow-2xl cursor-pointer bg-card/50 backdrop-blur-sm border border-primary/10 rounded-xl overflow-hidden">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10 ring-2 ring-primary/20">
+              <Avatar className="h-10 w-10 ring-2 ring-primary/20 transition-all duration-500 group-hover:ring-4">
                 <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
                 <AvatarFallback>{profile.name[0]}</AvatarFallback>
               </Avatar>
-              <div>
+              <div className="transition-all duration-500 group-hover:scale-105">
                 <h3 className="font-medium text-sm">{profile.name}</h3>
                 <p className="text-xs text-muted-foreground">Class of {graduationYear}</p>
               </div>
@@ -47,7 +47,7 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
         </Card>
       </HoverCardTrigger>
       
-      <HoverCardContent className="w-80 backdrop-blur-lg bg-background/95 border border-primary/20 rounded-xl">
+      <HoverCardContent className="w-80 backdrop-blur-lg bg-background/95 border border-primary/20 rounded-xl shadow-xl">
         <div className="space-y-4">
           <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">

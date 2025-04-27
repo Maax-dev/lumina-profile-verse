@@ -427,7 +427,8 @@ const sampleData = {
 const Results = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [gridColumns, setGridColumns] = useState(4);
-  const itemsPerPage = gridColumns * gridColumns;
+  const [gridRows, setGridRows] = useState(4);
+  const itemsPerPage = gridColumns * gridRows;
   const totalPages = Math.ceil(sampleData.total / itemsPerPage);
   
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -453,9 +454,12 @@ const Results = () => {
       
       <header className="max-w-6xl mx-auto py-8 animate-fadeIn">
         <div className="flex items-center justify-between mb-4">
-          <Link to="/" className="text-primary hover:underline flex items-center">
-            <ChevronLeft className="mr-2 h-4 w-4" />
-            Back to Search
+          <Link 
+            to="/" 
+            className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-ucla-blue to-ucla-gold hover:opacity-90 transition-opacity"
+          >
+            <ChevronLeft className="mr-2 h-4 w-4 text-white" />
+            <span className="text-white font-medium">Back to Search</span>
           </Link>
           <Link to="/history" className="flex items-center gap-2 text-primary hover:underline">
             <HistoryIcon className="h-4 w-4" />
@@ -479,9 +483,18 @@ const Results = () => {
       </header>
 
       <main className="max-w-6xl mx-auto mt-8">
-        <GridControls onGridChange={setGridColumns} />
+        <GridControls onGridChange={(cols, rows) => {
+          setGridColumns(cols);
+          setGridRows(rows);
+        }} />
         
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${gridColumns} gap-4`}>
+        <div 
+          className="grid gap-4" 
+          style={{
+            gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${gridRows}, minmax(0, 1fr))`
+          }}
+        >
           {currentResults.map((result) => (
             <div key={result.profile.id} className="animate-fadeIn">
               <AlumniCard 
