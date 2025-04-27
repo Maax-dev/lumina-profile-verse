@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { History as HistoryIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { toast } from "@/hooks/use-toast";
 
 interface SearchHistory {
   id: string;
@@ -16,15 +16,43 @@ interface SearchHistory {
 
 export default function History() {
   const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const history = localStorage.getItem("searchHistory");
-    if (history) {
-      setSearchHistory(JSON.parse(history));
-    }
+    const fetchHistory = async () => {
+      try {
+        const localHistory = JSON.parse(localStorage.getItem("searchHistory") || "[]");
+        
+        const response = await fetch("/getHistory");
+        if (!response.ok) {
+          throw new Error("Failed to fetch history");
+        }
+        const backendHistory = await response.json();
+        
+        const combinedHistory = [...localHistory, ...backendHistory]
+          .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        
+        const uniqueHistory = Array.from(
+          new Map(combinedHistory.map(item => [item.id, item])).values()
+        );
+        
+        setSearchHistory(uniqueHistory);
+      } catch (error) {
+        console.error("Error fetching history:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load search history",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHistory();
   }, []);
-  
+
   const handleHistoryClick = (query: string) => {
     navigate(`/results?q=${encodeURIComponent(query)}`);
   };
