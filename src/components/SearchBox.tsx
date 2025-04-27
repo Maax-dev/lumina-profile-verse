@@ -55,7 +55,7 @@ export function SearchBox() {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        }
+        } 
       });
 
       if (!response.ok) {

@@ -168,7 +168,7 @@ const Results = () => {
           <div className="flex items-center gap-4">
             <Avatar className="h-12 w-12">
               <AvatarImage src="/joe-bruin.png" alt="Joe Bruin" />
-              <AvatarFallback>JB</AvatarFallback>
+              <AvatarFallback>GN</AvatarFallback>
             </Avatar>
             <div>
               <h1 className="text-2xl font-bold">{searchQuery || "Search results"}</h1>
