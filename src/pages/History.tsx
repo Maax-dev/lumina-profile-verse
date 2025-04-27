@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { History as HistoryIcon, Clock } from "lucide-react";
+import { History as HistoryIcon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface SearchHistory {
@@ -68,6 +67,11 @@ export default function History() {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <div className="flex items-center">
+              <img 
+                src="/joe-bruin.png" 
+                alt="Joe Bruin" 
+                className="h-12 w-12"
+              />
               <div className="ml-2">
                 <svg className="w-24 h-10" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M20 10H10V50H20V35H30V50H40V10H30V25H20V10Z" className="fill-ucla-blue dark:fill-ucla-lighter-blue" />
@@ -80,7 +84,7 @@ export default function History() {
             <h1 className="text-2xl font-bold">Search History</h1>
           </div>
           <Link to="/">
-            <Button variant="outline" className="border-ucla-blue/50 dark:border-ucla-lighter-blue/50 text-ucla-blue dark:text-ucla-lighter-blue hover:bg-ucla-blue/10 dark:hover:bg-ucla-lighter-blue/10">New Search</Button>
+            <Button variant="outline">New Search</Button>
           </Link>
         </div>
 
@@ -91,13 +95,7 @@ export default function History() {
               onClick={() => handleHistoryClick(item)}
               className="cursor-pointer"
             >
-              <Card className="hover:bg-accent/5 transition-colors hover:scale-105" style={{
-                borderWidth: '2px',
-                borderImageSlice: '1',
-                borderStyle: 'solid',
-                borderImage: 'linear-gradient(90deg, var(--ucla-blue) 50%, var(--ucla-gold) 50%) 1',
-                borderRadius: '0.75rem',
-              }}>
+              <Card className="hover:bg-accent/5 transition-colors hover:scale-105">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -106,7 +104,7 @@ export default function History() {
                         {item.total} results • {item.source === "/getPeopleByNLP" ? "NLP Search" : "Standard Search"}
                       </p>
                     </div>
-                    <Clock className="h-5 w-5 text-ucla-gold dark:text-ucla-darker-gold" />
+                    <HistoryIcon className="h-5 w-5 text-muted-foreground" />
                   </div>
                 </CardContent>
               </Card>
