@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -10,7 +9,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { ChevronLeft, History as HistoryIcon, AlertCircle, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import LoadingGame from "@/components/LoadingGame";
+import LoadingState from "@/components/LoadingState";
 
 interface AlumniResult {
   profile: {
@@ -54,7 +53,6 @@ const Results = () => {
 
   const itemsPerPage = gridColumns * gridRows;
 
-  // 🔥 Corrected usedEndpoint fallback here
   const usedEndpoint = location.state?.endpoint || (searchParams.get('statement') ? '/getPeopleByNLP' : '/getPeople');
 
   useEffect(() => {
@@ -64,11 +62,10 @@ const Results = () => {
 
     if (cachedResults) {
       console.log("Loading cached search results from navigation state");
-      // Add artificial delay to show loading screen
       setTimeout(() => {
         setSearchData(cachedResults.response ? cachedResults.response : cachedResults);
         setIsLoading(false);
-      }, 2000); // 2 second delay to show the loading game
+      }, 2000);
     } else {
       const fetchResults = async () => {
         setIsLoading(true);
@@ -102,7 +99,6 @@ const Results = () => {
 
           const data = await response.json();
           
-          // Add artificial delay to show loading screen
           setTimeout(() => {
             setSearchData(data.response ? data.response : data);
             setIsLoading(false);
@@ -111,7 +107,7 @@ const Results = () => {
               title: "Search Results",
               description: `Found ${(data.response?.total || data.results?.length || 0)} matching alumni`,
             });
-          }, 2000); // 2 second delay to show the loading game
+          }, 2000);
 
         } catch (error) {
           console.error("Search error:", error);
@@ -137,15 +133,11 @@ const Results = () => {
     return () => clearTimeout(timer);
   }, [searchParams, toast, location.state, usedEndpoint]);
 
-  // Extract data safely with fallbacks
   const displayData = searchData || { results: [], total: 0, query: "" };
-  // Ensure resultsArray is always an array, even if data structure is unexpected
   const resultsArray = displayData.results || [];
   
-  // Filter out any invalid results (those without a valid profile.id)
   const validResults = resultsArray.filter(item => item && item.profile && item.profile.id);
   
-  // Create unique results using the filtered valid results array
   const uniqueResults = Array.from(new Map(validResults.map(item => [item.profile.id, item])).values());
   
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -162,9 +154,8 @@ const Results = () => {
     alum && `from ${alum}`
   ].filter(Boolean).join(" ");
 
-  // Show loading game screen when loading
   if (isLoading) {
-    return <LoadingGame />;
+    return <LoadingState />;
   }
 
   return (
@@ -247,8 +238,8 @@ const Results = () => {
                     profile: result.profile,
                     education: result.education,
                     experience: result.experience,
-                    searchData: searchData,  // pass full data
-                    endpoint: usedEndpoint  // ✅ pass correct endpoint also!
+                    searchData: searchData,
+                    endpoint: usedEndpoint
                   }
                 })}
               >
