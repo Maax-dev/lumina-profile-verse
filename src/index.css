@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -68,6 +69,7 @@
     background: linear-gradient(135deg, rgba(39, 116, 174, 0.1), rgba(255, 209, 0, 0.05));
     z-index: -1;
     animation: gradientFlow 15s ease infinite;
+    background-size: 400% 400%;
   }
 
   @keyframes gradientFlow {
@@ -82,6 +84,23 @@
     }
   }
 
+  @keyframes flow-gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-flow-gradient {
+    animation: flow-gradient 15s ease infinite;
+    background-size: 200% 200%;
+  }
+
   .glass {
     @apply backdrop-blur-lg bg-white/10 border border-white/20;
   }
@@ -93,4 +112,12 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
   }
+}
+
+.ucla-gradient-light {
+  @apply bg-gradient-to-r from-ucla-blue to-ucla-gold bg-clip-text;
+}
+
+.ucla-gradient-dark {
+  @apply bg-gradient-to-r from-ucla-darkest-blue to-ucla-darker-gold bg-clip-text;
 }

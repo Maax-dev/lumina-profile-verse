@@ -34,7 +34,7 @@ export function ThemeToggle() {
     <Button
       variant="outline"
       size="icon"
-      className="fixed top-4 right-4 w-10 h-10 rounded-full animate-fadeIn z-50 glass"
+      className="w-10 h-10 rounded-full animate-fadeIn z-50 glass"
       onClick={toggleTheme}
     >
       {theme === "dark" ? (
