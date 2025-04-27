@@ -129,7 +129,10 @@ export function SearchBox() {
                         <Input
                           type="text"
                           placeholder="Describe what you're looking for..."
-                          className="h-14 px-6 text-lg bg-background/20 backdrop-blur-sm rounded-xl"
+                          className="h-14 px-6 text-lg bg-background/20 backdrop-blur-sm rounded-xl
+                            border-2 border-ucla-blue/50 dark:border-ucla-lighter-blue/50 
+                            shadow-md shadow-ucla-blue/20 dark:shadow-ucla-lighter-blue/20 
+                            focus:border-ucla-blue dark:focus:border-ucla-lighter-blue"
                           {...field}
                         />
                       </FormControl>
