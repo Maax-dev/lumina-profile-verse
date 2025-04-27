@@ -15,6 +15,20 @@ export default {
     },
     extend: {
       colors: {
+        // UCLA Primary Colors
+        "ucla-blue": "#2774AE",
+        "ucla-gold": "#FFD100",
+        
+        // UCLA Blue Tones
+        "ucla-darkest-blue": "#003B5C",
+        "ucla-darker-blue": "#005587",
+        "ucla-lighter-blue": "#8BB8E8",
+        "ucla-lightest-blue": "#DAEBFE",
+        
+        // UCLA Gold Tones
+        "ucla-darkest-gold": "#FFB81C",
+        "ucla-darker-gold": "#FFC72C",
+        
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
