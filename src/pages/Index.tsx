@@ -17,7 +17,7 @@ const Index = () => {
         <div className="space-y-4">
           <h1 className="text-8xl md:text-9xl font-bold animate-bounce-slow relative">
             <span className="bg-gradient-to-r from-ucla-blue via-ucla-gold to-ucla-blue bg-clip-text text-transparent bg-[length:200%_200%] animate-shimmer">
-              Gra
+              Grad
               <span className="relative inline-block">
                 d
                 <GraduationCap 
