@@ -1,4 +1,3 @@
-
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,10 +31,10 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Card className="w-[280px] hover:scale-[1.02] transition-all duration-200 cursor-pointer">
+        <Card className="w-full transform transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card/50 backdrop-blur-sm border border-primary/10">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10">
+              <Avatar className="h-10 w-10 ring-2 ring-primary/20">
                 <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
                 <AvatarFallback>{profile.name[0]}</AvatarFallback>
               </Avatar>
@@ -48,7 +47,7 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
         </Card>
       </HoverCardTrigger>
       
-      <HoverCardContent className="w-80">
+      <HoverCardContent className="w-80 backdrop-blur-lg bg-background/95 border border-primary/20">
         <div className="space-y-4">
           <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">

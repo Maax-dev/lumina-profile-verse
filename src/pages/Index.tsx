@@ -1,48 +1,41 @@
 
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SearchBox } from "@/components/SearchBox";
-import { ProfileCard } from "@/components/ProfileCard";
-
-const mockProfiles = [
-  {
-    name: "John Doe",
-    location: "Los Angeles, CA",
-    headline: "Software Engineer at Tech Corp",
-    profile_picture_url: "https://i.pravatar.cc/150?u=1",
-  },
-  {
-    name: "Jane Smith",
-    location: "Los Angeles, CA",
-    headline: "Full Stack Developer at StartupCo",
-    profile_picture_url: "https://i.pravatar.cc/150?u=2",
-  },
-];
+import { Link } from "react-router-dom";
+import { History } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <ThemeToggle />
+      <nav className="fixed top-4 right-4 flex items-center gap-4">
+        <Link to="/history">
+          <Button variant="ghost" className="flex items-center gap-2">
+            <History className="h-4 w-4" />
+            Search History
+          </Button>
+        </Link>
+        <ThemeToggle />
+      </nav>
       
       {/* Hero Section */}
-      <section className="min-h-[50vh] flex flex-col items-center justify-center px-4 relative overflow-hidden">
+      <section className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-background z-0" />
         <div className="relative z-10 text-center space-y-8 max-w-4xl mx-auto animate-fadeIn">
-          <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-            Alumni Search Platform
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground">
-            Find and connect with software alumni from top universities
-          </p>
+          <div className="mb-8">
+            <img 
+              src="/joe-bruin.png" 
+              alt="Joe Bruin" 
+              className="w-24 h-24 mx-auto mb-6"
+            />
+            <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent ucla-gradient-light dark:ucla-gradient-dark mb-4">
+              Linkd
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground">
+              Connect with UCLA's Exceptional Alumni Network
+            </p>
+          </div>
           <SearchBox />
-        </div>
-      </section>
-
-      {/* Results Section */}
-      <section className="px-4 py-12 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mockProfiles.map((profile, index) => (
-            <ProfileCard key={index} profile={profile} />
-          ))}
         </div>
       </section>
     </div>

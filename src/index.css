@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -48,33 +47,50 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 201 100% 18%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground relative overflow-x-hidden;
   }
-  
+
+  /* UCLA themed background with flowing gradient */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(39, 116, 174, 0.1), rgba(255, 209, 0, 0.05));
+    z-index: -1;
+    animation: gradientFlow 15s ease infinite;
+  }
+
+  @keyframes gradientFlow {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
   .glass {
     @apply backdrop-blur-lg bg-white/10 border border-white/20;
   }
-  
+
   .alumni-card {
-    @apply transition-all duration-300 hover:scale-105 hover:shadow-lg;
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer;
   }
-  
-  .ucla-gradient-light {
-    @apply bg-gradient-to-r from-[#2774AE] to-[#8BB8E8];
-  }
-  
-  .ucla-gradient-dark {
-    @apply bg-gradient-to-r from-[#003B5C] to-[#005587];
-  }
-  
-  .ucla-gold-gradient {
-    @apply bg-gradient-to-r from-[#FFD100] to-[#FFB81C];
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
   }
 }
