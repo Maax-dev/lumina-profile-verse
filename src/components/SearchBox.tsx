@@ -29,7 +29,7 @@ export function SearchBox() {
         }}>
         <Input
           type="text"
-          placeholder="Find software alumni from SJSU in LA..."
+          placeholder="Find UCLA alumni by name, major, or location..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="w-full h-24 pl-8 pr-16 text-xl bg-background/20 backdrop-blur-sm rounded-3xl dark:placeholder:text-white/70 dark:text-white placeholder:text-foreground/70 text-foreground border-none"
