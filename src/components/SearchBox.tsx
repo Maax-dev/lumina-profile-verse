@@ -20,6 +20,44 @@ const searchSchema = z.object({
 
 type SearchFormValues = z.infer<typeof searchSchema>;
 
+// Mock data to use when API is not available
+const MOCK_SEARCH_RESULTS = {
+  response: {
+    results: [
+      {
+        id: "1",
+        name: "Jane Smith",
+        title: "Software Engineer",
+        company: "Tech Solutions Inc.",
+        location: "San Francisco, CA",
+        education: [{ school: "UCLA", degree: "Computer Science", year: "2020" }],
+        skills: ["React", "TypeScript", "Node.js"],
+        image: "https://i.pravatar.cc/150?img=1"
+      },
+      {
+        id: "2",
+        name: "John Doe",
+        title: "Product Manager",
+        company: "Innovation Labs",
+        location: "New York, NY",
+        education: [{ school: "UCLA", degree: "Business Administration", year: "2018" }],
+        skills: ["Product Strategy", "Agile", "Market Research"],
+        image: "https://i.pravatar.cc/150?img=2"
+      },
+      {
+        id: "3",
+        name: "Emily Johnson",
+        title: "Data Scientist",
+        company: "Data Insights Corp",
+        location: "Boston, MA",
+        education: [{ school: "UCLA", degree: "Statistics", year: "2021" }],
+        skills: ["Python", "Machine Learning", "Data Analysis"],
+        image: "https://i.pravatar.cc/150?img=3"
+      }
+    ]
+  }
+};
+
 export function SearchBox() {
   const navigate = useNavigate();
   const [isNLP, setIsNLP] = useState(false);
@@ -40,30 +78,43 @@ export function SearchBox() {
     let endpoint = '/getPeople';
     let params = new URLSearchParams();
 
-    if (isNLP) {
-      endpoint = '/getPeopleByNLP';
-      params.append('statement', data.nlpQuery || '');
-    } else {
-      if (data.keys) params.append("keys", data.keys);
-      if (data.loc) params.append("loc", data.loc);
-      if (data.alum) params.append("alum", data.alum);
-    }
-
-    console.log("Fetching from:", endpoint);
-
     try {
-      const response = await fetch(`${endpoint}?${params.toString()}`, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+      if (isNLP) {
+        endpoint = '/getPeopleByNLP';
+        params.append('statement', data.nlpQuery || '');
+      } else {
+        if (data.keys) params.append("keys", data.keys);
+        if (data.loc) params.append("loc", data.loc);
+        if (data.alum) params.append("alum", data.alum);
       }
 
-      const searchData = await response.json();
+      console.log("Fetching from:", endpoint);
+      
+      let searchData;
+      
+      try {
+        const response = await fetch(`${endpoint}?${params.toString()}`, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+        
+        searchData = await response.json();
+      } catch (error) {
+        console.error("API Error:", error);
+        // Use mock data when API fails
+        searchData = MOCK_SEARCH_RESULTS;
+        toast({
+          title: "Using demo data",
+          description: "Couldn't connect to the backend, using sample data instead.",
+          variant: "default",
+        });
+      }
 
       const timestamp = new Date().toISOString();
       const historyItem = {
@@ -76,13 +127,19 @@ export function SearchBox() {
       const existingHistory = JSON.parse(localStorage.getItem("searchHistory") || "[]");
       localStorage.setItem("searchHistory", JSON.stringify([historyItem, ...existingHistory]));
 
-      // ✅ Updated: Also pass endpoint
       navigate(`/results?${params.toString()}`, { state: { searchData, endpoint } });
-
-      toast({
-        title: "Searching...",
-        description: "Finding alumni matching your criteria",
-      });
+      
+      if (!searchData.response || searchData === MOCK_SEARCH_RESULTS) {
+        toast({
+          title: "Demo Mode",
+          description: "Showing sample alumni data",
+        });
+      } else {
+        toast({
+          title: "Searching...",
+          description: "Finding alumni matching your criteria",
+        });
+      }
     } catch (error) {
       console.error("Search error:", error);
       toast({
