@@ -11,9 +11,9 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 206 64% 42%;      /* UCLA Blue #2774AE */
+    --primary: 206 64% 42%;      /* UCLA Blue #2774AE - lighter for light mode */
     --primary-foreground: 210 40% 98%;
-    --secondary: 48 100% 50%;    /* UCLA Gold #FFD100 */
+    --secondary: 48 100% 50%;    /* UCLA Gold #FFD100 - lighter for light mode */
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -34,9 +34,9 @@
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
-    --primary: 201 100% 18%;    /* Darkest Blue #003B5C */
+    --primary: 201 100% 18%;    /* Darkest Blue #003B5C - darker for dark mode */
     --primary-foreground: 210 40% 98%;
-    --secondary: 45 100% 55%;   /* Darker Gold #FFC72C */
+    --secondary: 45 100% 55%;   /* Darker Gold #FFC72C - darker for dark mode */
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
@@ -72,6 +72,10 @@
     background-size: 400% 400%;
   }
 
+  .dark body::before {
+    background: linear-gradient(135deg, rgba(0, 59, 92, 0.2), rgba(255, 199, 44, 0.1));
+  }
+
   @keyframes gradientFlow {
     0% {
       background-position: 0% 50%;
@@ -103,6 +107,10 @@
 
   .glass {
     @apply backdrop-blur-lg bg-white/10 border border-white/20;
+  }
+
+  .dark .glass {
+    @apply backdrop-blur-lg bg-black/20 border border-white/10;
   }
 
   .alumni-card {

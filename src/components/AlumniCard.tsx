@@ -33,11 +33,11 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
   return (
     <Card 
       className="group relative overflow-hidden transition-all duration-300 cursor-pointer bg-white/10 backdrop-blur-sm border border-white hover:border-white/40"
-      style={{ height: "120px", minHeight: "120px" }}
+      style={{ height: "100px", minHeight: "100px", maxHeight: "100px" }}
       onClick={() => navigate(`/profile/${profile.id}`, { state: { profile, education, experience } })}
     >
-      <CardContent className="p-4 h-full transition-all duration-300 group-hover:h-[200px]">
-        <div className="flex flex-col h-full">
+      <CardContent className="p-4 h-full">
+        <div className="flex flex-col h-full relative">
           {/* Always visible content */}
           <div className="flex items-center gap-3 min-h-[48px]">
             <Avatar className="h-10 w-10 shrink-0 ring-2 ring-white/20 transition-all duration-300 group-hover:ring-4">
@@ -56,9 +56,20 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
             </p>
           </div>
 
-          {/* Content revealed on hover */}
-          <div className="mt-4 overflow-hidden opacity-0 transition-all duration-300 group-hover:opacity-100">
-            <div className="space-y-2">
+          {/* Expandable content on hover */}
+          <div className="absolute top-0 left-0 w-full h-full pt-4 pl-4 pr-4 pb-4 bg-gradient-to-b from-black/40 to-black/60 backdrop-blur-sm translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-[35%] overflow-hidden">
+            <div className="flex items-center gap-3 min-h-[48px] mb-3">
+              <Avatar className="h-10 w-10 shrink-0 ring-2 ring-white/20">
+                <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
+                <AvatarFallback>{profile.name[0]}</AvatarFallback>
+              </Avatar>
+              <div className="min-w-0">
+                <h3 className="font-medium text-sm text-white truncate">{profile.name}</h3>
+                <p className="text-xs text-white/70 truncate">Class of {graduationYear}</p>
+              </div>
+            </div>
+            
+            <div className="space-y-2 mt-2">
               <p className="text-xs text-white/70 truncate">
                 {education[0]?.degree} in {education[0]?.field_of_study}
               </p>

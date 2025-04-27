@@ -26,7 +26,7 @@ export function GridControls({ onGridChange }: GridControlsProps) {
         <span className="text-sm font-medium text-white min-w-[100px]">Columns: {columns}</span>
         <Slider
           defaultValue={[4]}
-          max={6}
+          max={5}
           min={1}
           step={1}
           onValueChange={handleColumnChange}
