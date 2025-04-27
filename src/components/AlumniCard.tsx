@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Briefcase } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AlumniCardProps {
   profile: {
@@ -28,40 +29,51 @@ interface AlumniCardProps {
 
 export function AlumniCard({ profile, education, experience }: AlumniCardProps) {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const graduationYear = education[0]?.end_date || "N/A";
 
   return (
-    <Card className="group relative transform hover:-translate-y-1 transition-all duration-300 cursor-pointer bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl">
-      <CardContent 
-        className="p-4"
-        onClick={() => navigate(`/profile/${profile.id}`, { state: { profile, education, experience } })}
-      >
-        <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10 ring-2 ring-white/20 transition-all duration-300 group-hover:ring-4">
-            <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
-            <AvatarFallback>{profile.name[0]}</AvatarFallback>
-          </Avatar>
-          <div>
-            <h3 className="font-medium text-sm text-white hover:underline">{profile.name}</h3>
-            <p className="text-xs text-white/70">Class of {graduationYear}</p>
-          </div>
-        </div>
-
-        <div className="mt-3 space-y-2">
-          <p className="text-sm text-white/70 flex items-center gap-1">
-            <MapPin className="h-3 w-3" /> {profile.location}
-          </p>
-          {experience[0] && (
-            <div className="flex items-center gap-2">
-              <Briefcase className="h-3 w-3 text-white/70" />
-              <p className="text-sm text-white/70">
-                {experience[0].title} at {experience[0].company_name}
-              </p>
+    <Card 
+      className="group relative overflow-hidden transition-all duration-300 cursor-pointer bg-white/10 backdrop-blur-sm border border-white hover:border-white/40"
+      style={{ height: "180px" }}
+      onClick={() => navigate(`/profile/${profile.id}`, { state: { profile, education, experience } })}
+    >
+      <CardContent className="p-4 h-full">
+        <div className="flex flex-col h-full">
+          {/* Always visible content */}
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10 ring-2 ring-white/20 transition-all duration-300 group-hover:ring-4">
+              <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
+              <AvatarFallback>{profile.name[0]}</AvatarFallback>
+            </Avatar>
+            <div>
+              <h3 className="font-medium text-sm text-white group-hover:underline">{profile.name}</h3>
+              <p className="text-xs text-white/70">Class of {graduationYear}</p>
             </div>
-          )}
-          <p className="text-xs text-white/70">
-            {education[0]?.degree} in {education[0]?.field_of_study}
-          </p>
+          </div>
+          
+          <div className="mt-2">
+            <p className="text-sm text-white/70 flex items-center gap-1">
+              <MapPin className="h-3 w-3" /> {profile.location}
+            </p>
+          </div>
+
+          {/* Content revealed on hover */}
+          <div className="mt-auto overflow-hidden transition-all duration-300 opacity-0 group-hover:opacity-100">
+            <div className="space-y-2">
+              <p className="text-xs text-white/70">
+                {education[0]?.degree} in {education[0]?.field_of_study}
+              </p>
+              {experience[0] && (
+                <div className="flex items-center gap-2">
+                  <Briefcase className="h-3 w-3 text-white/70" />
+                  <p className="text-sm text-white/70">
+                    {experience[0].title} at {experience[0].company_name}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
