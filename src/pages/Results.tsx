@@ -449,7 +449,7 @@ const Results = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-4">
+    <div className="min-h-screen bg-gradient-to-br from-ucla-blue to-ucla-gold p-4">
       <ThemeToggle />
       
       <header className="max-w-6xl mx-auto py-8 animate-fadeIn">
