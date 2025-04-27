@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, History as HistoryIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AlumniCard } from "@/components/AlumniCard";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { GridControls } from "@/components/GridControls";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
-// Mock data for alumni results
 const sampleData = {
   results: [
     {
@@ -427,7 +426,8 @@ const sampleData = {
 
 const Results = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const [gridColumns, setGridColumns] = useState(4);
+  const itemsPerPage = gridColumns * gridColumns;
   const totalPages = Math.ceil(sampleData.total / itemsPerPage);
   
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -479,7 +479,9 @@ const Results = () => {
       </header>
 
       <main className="max-w-6xl mx-auto mt-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <GridControls onGridChange={setGridColumns} />
+        
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${gridColumns} gap-4`}>
           {currentResults.map((result) => (
             <div key={result.profile.id} className="animate-fadeIn">
               <AlumniCard 

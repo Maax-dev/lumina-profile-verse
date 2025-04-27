@@ -1,7 +1,7 @@
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronUp, MapPin, Briefcase } from "lucide-react";
+import { MapPin, Briefcase } from "lucide-react";
 
 interface AlumniCardProps {
   profile: {
@@ -29,9 +29,9 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
   const graduationYear = education[0]?.end_date || "N/A";
 
   return (
-    <HoverCard>
+    <HoverCard openDelay={200}>
       <HoverCardTrigger asChild>
-        <Card className="w-full transform transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card/50 backdrop-blur-sm border border-primary/10">
+        <Card className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer bg-card/50 backdrop-blur-sm border border-primary/10 rounded-xl overflow-hidden">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <Avatar className="h-10 w-10 ring-2 ring-primary/20">
@@ -47,7 +47,7 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
         </Card>
       </HoverCardTrigger>
       
-      <HoverCardContent className="w-80 backdrop-blur-lg bg-background/95 border border-primary/20">
+      <HoverCardContent className="w-80 backdrop-blur-lg bg-background/95 border border-primary/20 rounded-xl">
         <div className="space-y-4">
           <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">
