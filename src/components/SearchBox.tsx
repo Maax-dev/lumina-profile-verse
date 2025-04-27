@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -110,26 +109,11 @@ export function SearchBox() {
                       <FormItem>
                         <FormLabel className="text-foreground/80 dark:text-white/80">Alumni Of</FormLabel>
                         <FormControl>
-                          <Select 
-                            onValueChange={field.onChange} 
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger className="bg-background/20 backdrop-blur-sm rounded-xl dark:text-white">
-                              <SelectValue placeholder="Select university" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="UCLA">UCLA</SelectItem>
-                              <SelectItem value="USC">USC</SelectItem>
-                              <SelectItem value="Stanford">Stanford</SelectItem>
-                              <SelectItem value="Berkeley">UC Berkeley</SelectItem>
-                              <SelectItem value="UCSD">UC San Diego</SelectItem>
-                              <SelectItem value="Caltech">Caltech</SelectItem>
-                              <SelectItem value="Harvard">Harvard</SelectItem>
-                              <SelectItem value="MIT">MIT</SelectItem>
-                              <SelectItem value="Yale">Yale</SelectItem>
-                              <SelectItem value="Princeton">Princeton</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <Input
+                            placeholder="Enter university name..."
+                            className="bg-background/20 backdrop-blur-sm rounded-xl dark:placeholder:text-white/50 dark:text-white"
+                            {...field}
+                          />
                         </FormControl>
                       </FormItem>
                     )}
