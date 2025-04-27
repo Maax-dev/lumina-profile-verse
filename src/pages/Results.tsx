@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -5,11 +6,11 @@ import { AlumniCard } from "@/components/AlumniCard";
 import { Card } from "@/components/ui/card";
 import { GridControls } from "@/components/GridControls";
 import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { ChevronLeft, History as HistoryIcon, AlertCircle, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import LoadingGame from "@/components/LoadingGame";
 
 interface AlumniResult {
   profile: {
@@ -63,8 +64,11 @@ const Results = () => {
 
     if (cachedResults) {
       console.log("Loading cached search results from navigation state");
-      setSearchData(cachedResults.response ? cachedResults.response : cachedResults);
-      setIsLoading(false);
+      // Add artificial delay to show loading screen
+      setTimeout(() => {
+        setSearchData(cachedResults.response ? cachedResults.response : cachedResults);
+        setIsLoading(false);
+      }, 2000); // 2 second delay to show the loading game
     } else {
       const fetchResults = async () => {
         setIsLoading(true);
@@ -97,23 +101,28 @@ const Results = () => {
           }
 
           const data = await response.json();
-          setSearchData(data.response ? data.response : data);
-
-          toast({
-            title: "Search Results",
-            description: `Found ${(data.response?.total || data.results?.length || 0)} matching alumni`,
-          });
+          
+          // Add artificial delay to show loading screen
+          setTimeout(() => {
+            setSearchData(data.response ? data.response : data);
+            setIsLoading(false);
+            
+            toast({
+              title: "Search Results",
+              description: `Found ${(data.response?.total || data.results?.length || 0)} matching alumni`,
+            });
+          }, 2000); // 2 second delay to show the loading game
 
         } catch (error) {
           console.error("Search error:", error);
           setError(error instanceof Error ? error.message : "Failed to fetch alumni data");
+          setIsLoading(false);
+          
           toast({
             title: "Error",
             description: "Failed to fetch alumni data. Please try again.",
             variant: "destructive",
           });
-        } finally {
-          setIsLoading(false);
         }
       };
 
@@ -145,6 +154,11 @@ const Results = () => {
     alum && `from ${alum}`
   ].filter(Boolean).join(" ");
 
+  // Show loading game screen when loading
+  if (isLoading) {
+    return <LoadingGame />;
+  }
+
   return (
     <div className="min-h-screen p-4 bg-background overflow-hidden">
       <ThemeToggle />
@@ -158,30 +172,32 @@ const Results = () => {
             <ChevronLeft className="mr-2 h-4 w-4 text-white" />
             <span className="text-white font-medium">Back to Search</span>
           </Link>
-          <Link to="/history" className="flex items-center gap-2 text-primary hover:underline">
+          <Link 
+            to="/history" 
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-ucla-blue/20 dark:bg-ucla-lighter-blue/20 hover:bg-ucla-blue/30 dark:hover:bg-ucla-lighter-blue/30 transition-colors text-ucla-blue dark:text-ucla-lighter-blue"
+          >
             <HistoryIcon className="h-4 w-4" />
             View History
           </Link>
         </div>
 
-        <div className="glass p-6 rounded-lg shadow-lg animate-scaleIn">
+        <div className="glass p-6 rounded-lg shadow-lg animate-scaleIn"
+             style={{ 
+               borderWidth: '3px', 
+               borderImageSlice: '1',
+               borderStyle: 'solid',
+               borderImage: 'linear-gradient(90deg, var(--ucla-blue) 50%, var(--ucla-gold) 50%) 1',
+               borderRadius: '1rem'
+             }}>
           <div className="flex items-center gap-4">
-            <Avatar className="h-12 w-12">
-              <AvatarImage src="/joe-bruin.png" alt="Joe Bruin" />
-              <AvatarFallback>JB</AvatarFallback>
-            </Avatar>
             <div>
               <h1 className="text-2xl font-bold">{searchQuery || "Search results"}</h1>
               <p className="text-muted-foreground mt-1">
-                {isLoading ? "Searching..." : `Found ${displayData.total || resultsArray.length} matching alumni`}
+                Found {displayData.total || resultsArray.length} matching alumni
               </p>
             </div>
           </div>
-          {isLoading ? (
-            <Progress value={50} className="mt-4 h-2" />
-          ) : (
-            <Progress value={(resultsArray.length / 100) * 100} className="mt-4 h-2" />
-          )}
+          <Progress value={100} className="mt-4 h-2 bg-ucla-blue/20 dark:bg-ucla-lighter-blue/20" />
         </div>
       </header>
 
@@ -199,16 +215,7 @@ const Results = () => {
           setGridRows(Math.min(rows, 5));
         }} />
 
-        {isLoading ? (
-          <div className="grid gap-8" style={{
-            gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${Math.min(gridRows, 5)}, auto)`,
-          }}>
-            {Array.from({ length: itemsPerPage }).map((_, idx) => (
-              <Card key={idx} className="h-64 animate-pulse" />
-            ))}
-          </div>
-        ) : currentResults.length > 0 ? (
+        {currentResults.length > 0 ? (
           <div className="grid gap-8" style={{
             gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))`,
             gridTemplateRows: `repeat(${Math.min(gridRows, 5)}, auto)`,
@@ -244,7 +251,7 @@ const Results = () => {
           </div>
         )}
 
-        {!isLoading && resultsArray.length > 0 && (
+        {resultsArray.length > 0 && (
           <Pagination className="mt-8 animate-fadeAndSlideUp" style={{ animationDelay: "600ms" }}>
             <PaginationContent>
               <PaginationItem>

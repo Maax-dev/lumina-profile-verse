@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -22,6 +23,7 @@ type SearchFormValues = z.infer<typeof searchSchema>;
 export function SearchBox() {
   const navigate = useNavigate();
   const [isNLP, setIsNLP] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   const form = useForm<SearchFormValues>({
     resolver: zodResolver(searchSchema),
@@ -34,6 +36,7 @@ export function SearchBox() {
   });
 
   const onSubmit = async (data: SearchFormValues) => {
+    setIsSearching(true);
     let endpoint = '/getPeople';
     let params = new URLSearchParams();
 
@@ -87,21 +90,21 @@ export function SearchBox() {
         description: "Failed to fetch alumni data. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSearching(false);
     }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl mx-auto">
-        <div className="relative p-1"
-          style={{
-            borderWidth: '2px',
-            borderImageSlice: '1',
-            borderStyle: 'solid',
-            borderImage: 'linear-gradient(90deg, var(--ucla-blue) 50%, var(--ucla-gold) 50%) 1',
-            borderRadius: '1.5rem',
-          }}>
-          <div className="flex flex-col gap-4 p-4 min-h-[320px]">
+        <div 
+          className={`relative p-1 rounded-2xl shadow-lg ${isNLP ? 
+            'bg-gradient-to-r from-ucla-blue to-ucla-gold' : 
+            'bg-gradient-to-r from-ucla-blue to-ucla-gold'}`}
+          style={{ padding: '3px' }}
+        >
+          <div className="flex flex-col gap-4 p-4 bg-background rounded-2xl min-h-[320px]">
             <div className="flex items-center justify-center mb-2">
               <div className="flex items-center gap-3">
                 <Switch
@@ -130,7 +133,8 @@ export function SearchBox() {
                           className="h-14 px-6 text-lg bg-background/20 backdrop-blur-sm rounded-xl
                             border-2 border-ucla-blue/50 dark:border-ucla-lighter-blue/50 
                             shadow-md shadow-ucla-blue/20 dark:shadow-ucla-lighter-blue/20 
-                            focus:border-ucla-blue dark:focus:border-ucla-lighter-blue"
+                            focus:border-ucla-blue dark:focus:border-ucla-lighter-blue
+                            transition-all duration-200"
                           {...field}
                         />
                       </FormControl>
@@ -151,7 +155,8 @@ export function SearchBox() {
                             className="h-14 px-6 text-lg bg-background/20 backdrop-blur-sm rounded-xl 
                               border-2 border-ucla-blue/50 dark:border-ucla-lighter-blue/50 
                               shadow-md shadow-ucla-blue/20 dark:shadow-ucla-lighter-blue/20 
-                              focus:border-ucla-blue dark:focus:border-ucla-lighter-blue"
+                              focus:border-ucla-blue dark:focus:border-ucla-lighter-blue
+                              transition-all duration-200"
                             {...field}
                           />
                         </FormControl>
@@ -171,7 +176,8 @@ export function SearchBox() {
                               className="h-14 bg-background/20 backdrop-blur-sm rounded-xl 
                                 border-2 border-ucla-blue/50 dark:border-ucla-lighter-blue/50 
                                 shadow-md shadow-ucla-blue/20 dark:shadow-ucla-lighter-blue/20 
-                                focus:border-ucla-blue dark:focus:border-ucla-lighter-blue"
+                                focus:border-ucla-blue dark:focus:border-ucla-lighter-blue
+                                transition-all duration-200"
                               {...field}
                             />
                           </FormControl>
@@ -190,7 +196,8 @@ export function SearchBox() {
                               className="h-14 bg-background/20 backdrop-blur-sm rounded-xl 
                                 border-2 border-ucla-blue/50 dark:border-ucla-lighter-blue/50 
                                 shadow-md shadow-ucla-blue/20 dark:shadow-ucla-lighter-blue/20 
-                                focus:border-ucla-blue dark:focus:border-ucla-lighter-blue"
+                                focus:border-ucla-blue dark:focus:border-ucla-lighter-blue
+                                transition-all duration-200"
                               {...field}
                             />
                           </FormControl>
@@ -207,8 +214,13 @@ export function SearchBox() {
                 type="submit"
                 size="icon"
                 className="w-12 h-12 rounded-full bg-ucla-blue hover:bg-ucla-blue/90 dark:bg-ucla-lighter-blue dark:hover:bg-ucla-lighter-blue/90 text-white"
+                disabled={isSearching}
               >
-                <Search className="h-5 w-5" />
+                {isSearching ? (
+                  <div className="animate-spin h-5 w-5 border-2 border-t-transparent rounded-full" />
+                ) : (
+                  <Search className="h-5 w-5" />
+                )}
               </Button>
             </div>
           </div>
