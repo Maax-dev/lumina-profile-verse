@@ -1,6 +1,7 @@
 
 import { SearchBox } from "@/components/SearchBox";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { GraduationCap } from "lucide-react";
 
 const Index = () => {
   return (
@@ -14,9 +15,17 @@ const Index = () => {
       
       <div className="relative z-10 text-center space-y-12 max-w-4xl mx-auto px-4">
         <div className="space-y-4">
-          <h1 className="text-8xl md:text-9xl font-bold animate-bounce-slow">
+          <h1 className="text-8xl md:text-9xl font-bold animate-bounce-slow relative">
             <span className="bg-gradient-to-r from-ucla-blue via-ucla-gold to-ucla-blue bg-clip-text text-transparent bg-[length:200%_200%] animate-shimmer">
-              GradNet
+              Gra
+              <span className="relative">
+                d
+                <GraduationCap 
+                  className="absolute -top-8 -right-2 w-8 h-8 text-ucla-gold animate-bounce-slow" 
+                  strokeWidth={1.5}
+                />
+              </span>
+              Net
             </span>
           </h1>
           <p className="text-xl md:text-2xl dark:text-white/90 text-foreground/90 animate-fadeIn">
