@@ -83,10 +83,11 @@ const Results = () => {
         // Build query string
         const queryString = new URLSearchParams({ keys, loc, alum }).toString();
         
-        console.log(`Fetching from: /getPeople?${queryString}`);
+        console.log(`Fetching from: /api/getPeople?${queryString}`);
         
         // Fetch results from API - use relative URL to ensure correct domain
-        const response = await fetch(`/getPeople?${queryString}`, {
+        // Using /api/ prefix to avoid CORS issues
+        const response = await fetch(`/api/getPeople?${queryString}`, {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
