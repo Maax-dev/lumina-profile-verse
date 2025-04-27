@@ -58,6 +58,7 @@
     @apply bg-background text-foreground relative overflow-x-hidden;
   }
 
+  /* UCLA themed background with flowing gradient */
   body::before {
     content: '';
     position: fixed;
@@ -99,6 +100,7 @@
     }
   }
 
+  /* Animation keyframes for transitions */
   @keyframes fadeAndSlideUp {
     from {
       opacity: 0;
@@ -147,6 +149,7 @@
     background-size: 200% 200%;
   }
 
+  /* Different animation delays for staggered effects */
   .delay-100 {
     animation-delay: 100ms;
   }
@@ -192,27 +195,11 @@
   @apply bg-gradient-to-r from-ucla-lighter-blue to-ucla-gold text-transparent bg-clip-text;
 }
 
+/* Themed buttons and UI elements */
 .ucla-button-light {
   @apply bg-gradient-to-r from-ucla-darkest-blue to-ucla-darker-blue text-white hover:opacity-90 transition-opacity;
 }
 
 .ucla-button-dark {
   @apply bg-gradient-to-r from-ucla-lighter-blue to-ucla-blue text-white hover:opacity-90 transition-opacity;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-80px) rotate(-35deg);
-    opacity: 0;
-  }
-  70% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  85% {
-    transform: translateY(-5px) rotate(5deg);
-  }
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
 }
