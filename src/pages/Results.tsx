@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, History as HistoryIcon } from "lucide-react";
+import { ChevronLeft, History as HistoryIcon, AlertCircle, Info } from "lucide-react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { AlumniCard } from "@/components/AlumniCard";
 import { GridControls } from "@/components/GridControls";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface AlumniResult {
   profile: {
@@ -61,6 +62,7 @@ const Results = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchData, setSearchData] = useState<SearchResponse["response"] | null>(null);
   const [animationComplete, setAnimationComplete] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   const itemsPerPage = gridColumns * gridRows;
   
@@ -70,6 +72,7 @@ const Results = () => {
     
     const fetchResults = async () => {
       setIsLoading(true);
+      setError(null);
       
       try {
         // Get search parameters from URL
@@ -80,14 +83,38 @@ const Results = () => {
         // Build query string
         const queryString = new URLSearchParams({ keys, loc, alum }).toString();
         
-        // Fetch results from API
-        const response = await fetch(`/getPeople?${queryString}`);
+        console.log(`Fetching from: /getPeople?${queryString}`);
         
+        // Fetch results from API - use relative URL to ensure correct domain
+        const response = await fetch(`/getPeople?${queryString}`, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        // Check if response is OK
         if (!response.ok) {
-          throw new Error("Failed to fetch search results");
+          console.error("API Error:", response.status, response.statusText);
+          throw new Error(`API error: ${response.status} ${response.statusText}`);
+        }
+        
+        // Verify contentType is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          console.error("Invalid content type:", contentType);
+          const text = await response.text();
+          console.error("Response body:", text.substring(0, 200) + "...");
+          throw new Error("API returned non-JSON response");
         }
         
         const data = await response.json() as SearchResponse;
+        
+        if (!data || !data.response) {
+          console.error("Invalid data structure:", data);
+          throw new Error("Invalid response format");
+        }
+        
         setSearchData(data.response);
         
         toast({
@@ -97,6 +124,7 @@ const Results = () => {
         
       } catch (error) {
         console.error("Search error:", error);
+        setError(error instanceof Error ? error.message : "Failed to fetch alumni data");
         toast({
           title: "Error",
           description: "Failed to fetch alumni data. Please try again.",
@@ -126,6 +154,16 @@ const Results = () => {
   const endIndex = startIndex + itemsPerPage;
   const currentResults = displayData.results.slice(startIndex, endIndex);
 
+  // Get search parameters for displaying query info
+  const keys = searchParams.get("keys") || "";
+  const loc = searchParams.get("loc") || "";
+  const alum = searchParams.get("alum") || "";
+  const searchQuery = [
+    keys && `"${keys}"`, 
+    loc && `in ${loc}`, 
+    alum && `from ${alum}`
+  ].filter(Boolean).join(" ");
+
   return (
     <div className="min-h-screen p-4 bg-background overflow-hidden">
       <ThemeToggle />
@@ -152,7 +190,7 @@ const Results = () => {
               <AvatarFallback>JB</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-2xl font-bold">{displayData.query || "Search results"}</h1>
+              <h1 className="text-2xl font-bold">{searchQuery || "Search results"}</h1>
               <p className="text-muted-foreground mt-1">
                 {isLoading ? "Searching..." : `Found ${displayData.total} matching alumni`}
               </p>
@@ -167,6 +205,22 @@ const Results = () => {
       </header>
 
       <main className="max-w-6xl mx-auto mt-8">
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              {error}
+              <div className="mt-2">
+                <p className="text-sm">
+                  Try refreshing the page or modifying your search criteria. If the problem persists, 
+                  please check the backend server connection.
+                </p>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
+        
         <GridControls onGridChange={(cols, rows) => {
           setGridColumns(cols);
           // Limit rows to a maximum of 5
@@ -209,6 +263,20 @@ const Results = () => {
           <div className="text-center py-16">
             <h2 className="text-xl font-semibold mb-2">No results found</h2>
             <p className="text-muted-foreground">Try modifying your search criteria</p>
+            
+            {!error && keys && (
+              <Alert className="mt-6 max-w-lg mx-auto">
+                <Info className="h-4 w-4" />
+                <AlertTitle>Search Tips</AlertTitle>
+                <AlertDescription>
+                  <ul className="list-disc pl-5 text-sm space-y-1">
+                    <li>Try using more general keywords</li>
+                    <li>Check for spelling errors</li>
+                    <li>Leave some fields empty to broaden your search</li>
+                  </ul>
+                </AlertDescription>
+              </Alert>
+            )}
           </div>
         )}
         

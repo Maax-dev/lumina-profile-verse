@@ -123,6 +123,11 @@ export function SearchBox() {
                               <SelectItem value="Stanford">Stanford</SelectItem>
                               <SelectItem value="Berkeley">UC Berkeley</SelectItem>
                               <SelectItem value="UCSD">UC San Diego</SelectItem>
+                              <SelectItem value="Caltech">Caltech</SelectItem>
+                              <SelectItem value="Harvard">Harvard</SelectItem>
+                              <SelectItem value="MIT">MIT</SelectItem>
+                              <SelectItem value="Yale">Yale</SelectItem>
+                              <SelectItem value="Princeton">Princeton</SelectItem>
                             </SelectContent>
                           </Select>
                         </FormControl>
