@@ -1,16 +1,21 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 
 export function SearchBox() {
   const [query, setQuery] = useState("");
+  const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle search logic here
     console.log("Searching for:", query);
+    
+    if (query.trim()) {
+      navigate("/results");
+    }
   };
 
   return (

@@ -2,22 +2,40 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("theme") || "dark";
+    }
+    return "dark";
+  });
+  const { toast } = useToast();
 
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    toast({
+      title: `Theme Changed`,
+      description: `Switched to ${newTheme} mode`,
+      duration: 2000,
+    });
+  };
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size="icon"
-      className="fixed top-4 right-4 w-10 h-10 rounded-full animate-fadeIn"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="fixed top-4 right-4 w-10 h-10 rounded-full animate-fadeIn z-50 glass"
+      onClick={toggleTheme}
     >
       {theme === "dark" ? (
         <Sun className="h-5 w-5" />
