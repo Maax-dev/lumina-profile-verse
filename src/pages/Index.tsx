@@ -19,7 +19,7 @@ const Index = () => {
               Linkd
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 animate-fadeIn">
+          <p className="text-xl md:text-2xl dark:text-white/90 text-foreground/90 animate-fadeIn">
             Connect with SJSU Alumni
           </p>
         </div>
