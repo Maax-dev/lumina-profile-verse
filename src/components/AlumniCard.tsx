@@ -32,12 +32,13 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
 
   return (
     <Card 
-      className="group relative h-auto min-h-[120px] transition-all duration-300 cursor-pointer hover:shadow-xl shadow-md overflow-hidden"
+      className="group relative transition-all duration-300 cursor-pointer hover:shadow-xl shadow-md overflow-hidden hover:scale-105"
       style={{
-        borderImageSlice: '1',
-        borderImageSource: 'linear-gradient(to right, var(--ucla-blue) 50%, var(--ucla-gold) 50%)',
         borderWidth: '3px',
-        borderStyle: 'solid'
+        borderImageSlice: '1',
+        borderStyle: 'solid',
+        borderImage: 'linear-gradient(90deg, var(--ucla-blue) 50%, var(--ucla-gold) 50%) 1',
+        boxShadow: '0 4px 6px -1px rgba(39, 116, 174, 0.1), 0 2px 4px -1px rgba(255, 209, 0, 0.06)'
       }}
       onClick={() => navigate(`/profile/${profile.id}`, { state: { profile, education, experience } })}
     >
