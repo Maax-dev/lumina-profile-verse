@@ -1,12 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { History as HistoryIcon, AlertCircle } from "lucide-react";
+import { History as HistoryIcon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface SearchHistory {
   query: string;
@@ -18,32 +16,24 @@ interface SearchHistory {
 export default function History() {
   const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/getHistory");
-        
+        const response = await fetch("http://127.0.0.1:5000/getHistory"); // ✅ Corrected URL
         if (!response.ok) {
-          throw new Error(`Failed to fetch history: ${response.status}`);
+          throw new Error("Failed to fetch history");
         }
-        
         const backendHistory = await response.json();
         setSearchHistory(backendHistory);
-        setError(null);
       } catch (error) {
         console.error("Error fetching history:", error);
-        setError("Unable to load search history. The server may be unavailable.");
         toast({
           title: "Error",
           description: "Failed to load search history",
           variant: "destructive",
         });
-        
-        // Set empty history array to prevent errors
-        setSearchHistory([]);
       } finally {
         setIsLoading(false);
       }
@@ -98,52 +88,30 @@ export default function History() {
           </Link>
         </div>
 
-        {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
         <div className="space-y-4">
-          {isLoading ? (
-            // Loading state
-            Array(3).fill(0).map((_, idx) => (
-              <Card key={idx} className="animate-pulse">
-                <CardContent className="p-4 h-16 flex items-center">
-                  <div className="w-full space-y-2">
-                    <div className="h-4 bg-muted rounded w-3/4"></div>
-                    <div className="h-3 bg-muted rounded w-1/2"></div>
+          {searchHistory.map((item, idx) => (
+            <div 
+              key={idx}
+              onClick={() => handleHistoryClick(item)}
+              className="cursor-pointer"
+            >
+              <Card className="hover:bg-accent/5 transition-colors hover:scale-105">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{item.query}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {item.total} results • {item.source === "/getPeopleByNLP" ? "NLP Search" : "Standard Search"}
+                      </p>
+                    </div>
+                    <HistoryIcon className="h-5 w-5 text-muted-foreground" />
                   </div>
                 </CardContent>
               </Card>
-            ))
-          ) : (
-            searchHistory.map((item, idx) => (
-              <div 
-                key={idx}
-                onClick={() => handleHistoryClick(item)}
-                className="cursor-pointer"
-              >
-                <Card className="hover:bg-accent/5 transition-colors hover:scale-105">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium">{item.query}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {item.total} results • {item.source === "/getPeopleByNLP" ? "NLP Search" : "Standard Search"}
-                        </p>
-                      </div>
-                      <HistoryIcon className="h-5 w-5 text-muted-foreground" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            ))
-          )}
+            </div>
+          ))}
           
-          {searchHistory.length === 0 && !isLoading && !error && (
+          {searchHistory.length === 0 && !isLoading && (
             <div className="text-center py-12 text-muted-foreground">
               <HistoryIcon className="h-12 w-12 mx-auto mb-4" />
               <p>No search history yet</p>

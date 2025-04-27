@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -10,7 +9,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
-import { getMockSearchResults } from "@/utils/mockData";
 
 const searchSchema = z.object({
   keys: z.string().optional(),
@@ -24,7 +22,6 @@ type SearchFormValues = z.infer<typeof searchSchema>;
 export function SearchBox() {
   const navigate = useNavigate();
   const [isNLP, setIsNLP] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<SearchFormValues>({
     resolver: zodResolver(searchSchema),
@@ -39,36 +36,24 @@ export function SearchBox() {
   const onSubmit = async (data: SearchFormValues) => {
     let endpoint = '/getPeople';
     let params = new URLSearchParams();
-    let queryDisplay = '';
 
-    setIsSubmitting(true);
-    
     if (isNLP) {
       endpoint = '/getPeopleByNLP';
       params.append('statement', data.nlpQuery || '');
-      queryDisplay = data.nlpQuery || '';
     } else {
       if (data.keys) params.append("keys", data.keys);
       if (data.loc) params.append("loc", data.loc);
       if (data.alum) params.append("alum", data.alum);
-      queryDisplay = `${data.keys} ${data.loc} ${data.alum}`.trim();
     }
 
     console.log("Fetching from:", endpoint);
-    
-    toast({
-      title: "Searching...",
-      description: "Finding alumni matching your criteria",
-    });
 
     try {
       const response = await fetch(`${endpoint}?${params.toString()}`, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        },
-        // Add a timeout to prevent hanging requests
-        signal: AbortSignal.timeout(10000) 
+        }
       });
 
       if (!response.ok) {
@@ -80,7 +65,7 @@ export function SearchBox() {
       const timestamp = new Date().toISOString();
       const historyItem = {
         id: timestamp,
-        query: queryDisplay,
+        query: isNLP ? data.nlpQuery : `${data.keys} ${data.loc} ${data.alum}`.trim(),
         timestamp,
         results: searchData.response?.results?.length || 0
       };
@@ -88,33 +73,20 @@ export function SearchBox() {
       const existingHistory = JSON.parse(localStorage.getItem("searchHistory") || "[]");
       localStorage.setItem("searchHistory", JSON.stringify([historyItem, ...existingHistory]));
 
-      // Navigate with the response data
+      // ✅ Updated: Also pass endpoint
       navigate(`/results?${params.toString()}`, { state: { searchData, endpoint } });
 
+      toast({
+        title: "Searching...",
+        description: "Finding alumni matching your criteria",
+      });
     } catch (error) {
       console.error("Search error:", error);
-      
-      // Fallback to mock data when API fails
-      const mockResults = getMockSearchResults(queryDisplay);
-      
       toast({
-        title: "Backend unavailable",
-        description: "Using demo data as backend is unavailable",
+        title: "Error",
+        description: "Failed to fetch alumni data. Please try again.",
         variant: "destructive",
       });
-      
-      // Navigate with mock data
-      navigate(`/results?${params.toString()}`, { 
-        state: { 
-          searchData: { 
-            response: mockResults 
-          }, 
-          endpoint,
-          isMockData: true
-        } 
-      });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -235,13 +207,8 @@ export function SearchBox() {
                 type="submit"
                 size="icon"
                 className="w-12 h-12 rounded-full bg-ucla-blue hover:bg-ucla-blue/90 dark:bg-ucla-lighter-blue dark:hover:bg-ucla-lighter-blue/90 text-white"
-                disabled={isSubmitting}
               >
-                {isSubmitting ? (
-                  <div className="h-5 w-5 border-2 border-t-transparent border-white rounded-full animate-spin" />
-                ) : (
-                  <Search className="h-5 w-5" />
-                )}
+                <Search className="h-5 w-5" />
               </Button>
             </div>
           </div>
