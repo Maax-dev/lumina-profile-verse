@@ -32,11 +32,16 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
 
   return (
     <Card 
-      className="group relative overflow-hidden transition-all duration-300 cursor-pointer border-l-ucla-blue border-r-ucla-gold hover:shadow-xl"
+      className="group relative overflow-hidden transition-all duration-300 cursor-pointer border-l-ucla-blue border-r-ucla-gold hover:shadow-xl shadow-md"
+      style={{
+        borderLeft: '4px solid var(--ucla-blue)',
+        borderRight: '4px solid var(--ucla-gold)',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1), -5px 0 15px rgba(39, 116, 174, 0.3), 5px 0 15px rgba(255, 209, 0, 0.3)'
+      }}
       onClick={() => navigate(`/profile/${profile.id}`, { state: { profile, education, experience } })}
     >
-      {/* Fixed height container that will expand on hover */}
-      <div className="transition-all duration-300 group-hover:pb-24 h-[100px]">
+      {/* Fixed height container that will get extra padding on hover */}
+      <div className="h-[100px] transition-all duration-300 ease-in-out group-hover:h-[180px] overflow-hidden relative">
         <CardContent className="p-4 h-full relative">
           {/* Basic info shown by default */}
           <div className="flex flex-col h-full">
@@ -58,8 +63,8 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
             </div>
           </div>
 
-          {/* Extended info that appears on hover */}
-          <div className="absolute bottom-0 left-0 w-full bg-gradient-to-b from-primary/90 to-primary/80 backdrop-blur-sm translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-0 p-4 border-t border-white/10">
+          {/* Extended info shown on hover */}
+          <div className="absolute left-0 bottom-0 w-full bg-gradient-to-b from-primary/90 to-primary/80 backdrop-blur-sm p-4 transform translate-y-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out border-t border-white/10 shadow-[0_-4px_10px_rgba(0,0,0,0.15)]">
             <div className="space-y-2 text-white">
               <p className="text-xs truncate">
                 {education[0]?.degree} in {education[0]?.field_of_study}
