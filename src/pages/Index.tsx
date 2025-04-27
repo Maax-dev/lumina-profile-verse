@@ -16,7 +16,7 @@ const Index = () => {
         <div className="space-y-4">
           <h1 className="text-8xl md:text-9xl font-bold animate-bounce-slow">
             <span className="bg-gradient-to-r from-ucla-blue via-ucla-gold to-ucla-blue bg-clip-text text-transparent bg-[length:200%_200%] animate-shimmer">
-              Linkd
+              GradNet
             </span>
           </h1>
           <p className="text-xl md:text-2xl dark:text-white/90 text-foreground/90 animate-fadeIn">
