@@ -17,9 +17,8 @@ const Index = () => {
         <div className="space-y-4">
           <h1 className="text-8xl md:text-9xl font-bold animate-bounce-slow relative">
             <span className="bg-gradient-to-r from-ucla-blue via-ucla-gold to-ucla-blue bg-clip-text text-transparent bg-[length:200%_200%] animate-shimmer">
-              Gra
+              Grad
               <span className="relative">
-                d
                 <GraduationCap 
                   className="absolute -top-8 -right-2 w-8 h-8 text-ucla-gold animate-bounce-slow" 
                   strokeWidth={1.5}
@@ -42,3 +41,4 @@ const Index = () => {
 }
 
 export default Index;
+
