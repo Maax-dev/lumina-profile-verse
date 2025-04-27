@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -36,7 +37,7 @@ export function SearchBox() {
   const onSubmit = async (data: SearchFormValues) => {
     let endpoint = '/getPeople';
     let params = new URLSearchParams();
-
+    
     if (isNLP) {
       endpoint = '/getPeopleByNLP';
       params.append('statement', data.nlpQuery || '');
@@ -47,7 +48,7 @@ export function SearchBox() {
     }
 
     console.log("Fetching from:", endpoint);
-
+    
     try {
       const response = await fetch(`${endpoint}?${params.toString()}`, {
         headers: {
@@ -61,7 +62,8 @@ export function SearchBox() {
       }
 
       const searchData = await response.json();
-
+      
+      // Save search to history
       const timestamp = new Date().toISOString();
       const historyItem = {
         id: timestamp,
@@ -73,9 +75,9 @@ export function SearchBox() {
       const existingHistory = JSON.parse(localStorage.getItem("searchHistory") || "[]");
       localStorage.setItem("searchHistory", JSON.stringify([historyItem, ...existingHistory]));
 
-      // ✅ Updated: Also pass endpoint
-      navigate(`/results?${params.toString()}`, { state: { searchData, endpoint } });
-
+      // Navigate to results with the search data
+      navigate(`/results?${params.toString()}`, { state: { searchData } });
+      
       toast({
         title: "Searching...",
         description: "Finding alumni matching your criteria",
@@ -101,7 +103,7 @@ export function SearchBox() {
             borderImage: 'linear-gradient(90deg, var(--ucla-blue) 50%, var(--ucla-gold) 50%) 1',
             borderRadius: '1.5rem',
           }}>
-          <div className="flex flex-col gap-4 p-4 min-h-[320px]">
+          <div className={`flex flex-col gap-4 p-4 min-h-[320px]`}>
             <div className="flex items-center justify-center mb-2">
               <div className="flex items-center gap-3">
                 <Switch
@@ -158,6 +160,7 @@ export function SearchBox() {
                       </FormItem>
                     )}
                   />
+
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
@@ -166,8 +169,8 @@ export function SearchBox() {
                         <FormItem>
                           <FormLabel className="text-sm font-medium ml-1 mb-2">Location</FormLabel>
                           <FormControl>
-                            <Input
-                              placeholder="Enter location..."
+                            <Input 
+                              placeholder="Enter location..." 
                               className="h-14 bg-background/20 backdrop-blur-sm rounded-xl 
                                 border-2 border-ucla-blue/50 dark:border-ucla-lighter-blue/50 
                                 shadow-md shadow-ucla-blue/20 dark:shadow-ucla-lighter-blue/20 
@@ -178,6 +181,7 @@ export function SearchBox() {
                         </FormItem>
                       )}
                     />
+                    
                     <FormField
                       control={form.control}
                       name="alum"
