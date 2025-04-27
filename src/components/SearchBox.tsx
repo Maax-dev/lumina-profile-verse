@@ -103,14 +103,14 @@ export function SearchBox() {
             borderImage: 'linear-gradient(90deg, var(--ucla-blue) 50%, var(--ucla-gold) 50%) 1',
             borderRadius: '1.5rem',
           }}>
-          <div className={`flex flex-col gap-6 p-6 min-h-[320px]`}>
-            <div className="flex items-center justify-between">
+          <div className={`flex flex-col gap-6 p-6 min-h-[400px]`}>
+            <div className="flex items-center justify-center mb-2">
               <div className="flex items-center gap-3">
                 <Switch
                   checked={isNLP}
                   onCheckedChange={setIsNLP}
                   id="nlp-mode"
-                  className="data-[state=checked]:bg-ucla-gold data-[state=checked]:dark:bg-ucla-lighter-blue data-[state=unchecked]:bg-gray-200 dark:data-[state=unchecked]:bg-gray-700"
+                  className="data-[state=checked]:bg-ucla-gold data-[state=checked]:dark:bg-ucla-gold dark:data-[state=unchecked]:bg-gray-700"
                 />
                 <FormLabel htmlFor="nlp-mode" className="text-sm font-medium">
                   {isNLP ? "NLP Search" : "Standard Search"}
@@ -124,7 +124,7 @@ export function SearchBox() {
                   control={form.control}
                   name="nlpQuery"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="h-[200px] flex flex-col justify-center">
                       <FormControl>
                         <Input
                           type="text"
@@ -137,7 +137,7 @@ export function SearchBox() {
                   )}
                 />
               ) : (
-                <>
+                <div className="h-[200px] flex flex-col justify-between">
                   <FormField
                     control={form.control}
                     name="keys"
@@ -190,7 +190,7 @@ export function SearchBox() {
                       )}
                     />
                   </div>
-                </>
+                </div>
               )}
             </div>
 
