@@ -14,16 +14,31 @@ export default defineConfig(({ mode }) => ({
         target: "http://127.0.0.1:5000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/getPeople/, "/getPeople"),
+        configure: (proxy) => {
+          proxy.on('error', (err) => {
+            console.log('proxy error', err);
+          });
+        }
       },
       "/getPeopleByNLP": {
         target: "http://127.0.0.1:5000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/getPeopleByNLP/, "/getPeopleByNLP"),
+        configure: (proxy) => {
+          proxy.on('error', (err) => {
+            console.log('proxy error', err);
+          });
+        }
       },
       "/getHistory": {
         target: "http://127.0.0.1:5000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/getHistory/, "/getHistory"),
+        configure: (proxy) => {
+          proxy.on('error', (err) => {
+            console.log('proxy error', err);
+          });
+        }
       },
     },
   },
