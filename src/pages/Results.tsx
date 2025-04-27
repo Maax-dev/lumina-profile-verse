@@ -85,8 +85,7 @@ const Results = () => {
         
         console.log(`Fetching from: /api/getPeople?${queryString}`);
         
-        // Fetch results from API - use relative URL to ensure correct domain
-        // Using /api/ prefix to avoid CORS issues
+        // Fetch results from API
         const response = await fetch(`/api/getPeople?${queryString}`, {
           headers: {
             'Accept': 'application/json',
@@ -97,6 +96,8 @@ const Results = () => {
         // Check if response is OK
         if (!response.ok) {
           console.error("API Error:", response.status, response.statusText);
+          const errorText = await response.text();
+          console.error("Error response:", errorText);
           throw new Error(`API error: ${response.status} ${response.statusText}`);
         }
         
@@ -110,6 +111,7 @@ const Results = () => {
         }
         
         const data = await response.json() as SearchResponse;
+        console.log("API response data:", data);
         
         if (!data || !data.response) {
           console.error("Invalid data structure:", data);

@@ -8,6 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { toast } from "@/hooks/use-toast";
 
 const searchSchema = z.object({
   keys: z.string().optional(),
@@ -31,12 +32,23 @@ export function SearchBox() {
   });
 
   const onSubmit = async (data: SearchFormValues) => {
+    // Build the query parameters
     const params = new URLSearchParams();
     if (data.keys) params.append("keys", data.keys);
     if (data.loc) params.append("loc", data.loc);
     if (data.alum) params.append("alum", data.alum);
     
+    // Log the search parameters for debugging
+    console.log("Search parameters:", data);
+    
+    // Navigate to results page with search parameters
     navigate(`/results?${params.toString()}`);
+    
+    // Show a toast notification for better UX
+    toast({
+      title: "Searching...",
+      description: "Finding alumni matching your criteria",
+    });
   };
 
   return (
@@ -72,8 +84,7 @@ export function SearchBox() {
               />
               {!isExpanded && (
                 <Button
-                  type="button"
-                  onClick={() => setIsExpanded(true)}
+                  type="submit"
                   size="icon"
                   className="absolute right-4 w-16 h-16 rounded-xl bg-white/10 hover:bg-white/20 dark:text-white text-foreground"
                 >
