@@ -499,14 +499,16 @@ const Results = () => {
       <main className="max-w-6xl mx-auto mt-8">
         <GridControls onGridChange={(cols, rows) => {
           setGridColumns(cols);
-          setGridRows(rows);
+          // Limit rows to a maximum of 5
+          setGridRows(Math.min(rows, 5));
         }} />
         
         <div 
-          className="grid gap-4" 
+          className="grid gap-8" 
           style={{
             gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${gridRows}, minmax(0, 1fr))`
+            gridTemplateRows: `repeat(${Math.min(gridRows, 5)}, auto)`,
+            gridAutoRows: 'auto'
           }}
         >
           {currentResults.map((result, idx) => (

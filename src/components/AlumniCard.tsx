@@ -32,7 +32,7 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
 
   return (
     <Card 
-      className="group relative overflow-hidden transition-all duration-300 cursor-pointer border-l-ucla-blue border-r-ucla-gold hover:shadow-xl shadow-md"
+      className="group rounded-lg overflow-hidden transition-all duration-300 cursor-pointer hover:shadow-xl shadow-md"
       style={{
         borderLeft: '4px solid var(--ucla-blue)',
         borderRight: '4px solid var(--ucla-gold)',
@@ -40,46 +40,44 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
       }}
       onClick={() => navigate(`/profile/${profile.id}`, { state: { profile, education, experience } })}
     >
-      {/* Fixed height container that will get extra padding on hover */}
-      <div className="h-[100px] transition-all duration-300 ease-in-out group-hover:h-[180px] overflow-hidden relative">
-        <CardContent className="p-4 h-full relative">
-          {/* Basic info shown by default */}
-          <div className="flex flex-col h-full">
-            <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10 ring-2 ring-primary/30 transition-all duration-300 group-hover:ring-primary">
-                <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
-                <AvatarFallback>{profile.name[0]}</AvatarFallback>
-              </Avatar>
-              <div className="min-w-0">
-                <h3 className="font-medium text-sm truncate">{profile.name}</h3>
-                <p className="text-xs text-muted-foreground truncate">Class of {graduationYear}</p>
-              </div>
-            </div>
-            
-            <div className="mt-2">
-              <p className="text-xs flex items-center gap-1 text-muted-foreground truncate">
-                <MapPin className="h-3 w-3 shrink-0" /> {profile.location}
-              </p>
+      {/* Fixed height container to prevent layout shifts */}
+      <div className="h-[180px] relative">
+        {/* Basic info always visible */}
+        <CardContent className="p-4">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10 ring-2 ring-primary/30 transition-all duration-300 group-hover:ring-primary">
+              <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
+              <AvatarFallback>{profile.name[0]}</AvatarFallback>
+            </Avatar>
+            <div className="min-w-0">
+              <h3 className="font-medium text-sm truncate">{profile.name}</h3>
+              <p className="text-xs text-muted-foreground truncate">Class of {graduationYear}</p>
             </div>
           </div>
-
-          {/* Extended info shown on hover */}
-          <div className="absolute left-0 bottom-0 w-full bg-gradient-to-b from-primary/90 to-primary/80 backdrop-blur-sm p-4 transform translate-y-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out border-t border-white/10 shadow-[0_-4px_10px_rgba(0,0,0,0.15)]">
-            <div className="space-y-2 text-white">
-              <p className="text-xs truncate">
-                {education[0]?.degree} in {education[0]?.field_of_study}
-              </p>
-              {experience[0] && (
-                <div className="flex items-center gap-2">
-                  <Briefcase className="h-3 w-3 text-white/70 shrink-0" />
-                  <p className="text-xs truncate">
-                    {experience[0].title} at {experience[0].company_name}
-                  </p>
-                </div>
-              )}
-            </div>
+          
+          <div className="mt-2">
+            <p className="text-xs flex items-center gap-1 text-muted-foreground truncate">
+              <MapPin className="h-3 w-3 shrink-0" /> {profile.location}
+            </p>
           </div>
         </CardContent>
+
+        {/* Extended info shown on hover - positioned absolutely at bottom */}
+        <div className="absolute left-0 bottom-0 right-0 bg-gradient-to-b from-primary/90 to-primary/80 backdrop-blur-sm p-4 transform translate-y-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out border-t border-white/10 shadow-[0_-4px_10px_rgba(0,0,0,0.15)]">
+          <div className="space-y-2 text-white">
+            <p className="text-xs truncate">
+              {education[0]?.degree} in {education[0]?.field_of_study}
+            </p>
+            {experience[0] && (
+              <div className="flex items-center gap-2">
+                <Briefcase className="h-3 w-3 text-white/70 shrink-0" />
+                <p className="text-xs truncate">
+                  {experience[0].title} at {experience[0].company_name}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </Card>
   );
