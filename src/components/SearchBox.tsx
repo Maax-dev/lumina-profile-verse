@@ -103,7 +103,7 @@ export function SearchBox() {
             borderImage: 'linear-gradient(90deg, var(--ucla-blue) 50%, var(--ucla-gold) 50%) 1',
             borderRadius: '1.5rem',
           }}>
-          <div className={`flex flex-col gap-6 p-6 min-h-[400px]`}>
+          <div className={`flex flex-col gap-4 p-4 min-h-[320px]`}>
             <div className="flex items-center justify-center mb-2">
               <div className="flex items-center gap-3">
                 <Switch
@@ -118,13 +118,13 @@ export function SearchBox() {
               </div>
             </div>
 
-            <div className="space-y-6 flex-grow">
+            <div className="space-y-4 flex-grow">
               {isNLP ? (
                 <FormField
                   control={form.control}
                   name="nlpQuery"
                   render={({ field }) => (
-                    <FormItem className="h-[200px] flex flex-col justify-center">
+                    <FormItem className="h-[180px] flex flex-col justify-center">
                       <FormControl>
                         <Input
                           type="text"
@@ -137,7 +137,7 @@ export function SearchBox() {
                   )}
                 />
               ) : (
-                <div className="h-[200px] flex flex-col justify-between">
+                <div className="h-[180px] flex flex-col justify-between">
                   <FormField
                     control={form.control}
                     name="keys"
@@ -146,7 +146,7 @@ export function SearchBox() {
                         <FormControl>
                           <Input
                             type="text"
-                            placeholder="Find UCLA alumni by name, major..."
+                            placeholder="Enter Keywords"
                             className="h-14 px-6 text-lg bg-background/20 backdrop-blur-sm rounded-xl"
                             {...field}
                           />
