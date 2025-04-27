@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -202,4 +201,21 @@
 
 .ucla-button-dark {
   @apply bg-gradient-to-r from-ucla-lighter-blue to-ucla-blue text-white hover:opacity-90 transition-opacity;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100%) rotate(-45deg);
+    opacity: 0;
+  }
+  70% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(-15%) rotate(5deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
 }
