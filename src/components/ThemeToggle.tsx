@@ -30,18 +30,17 @@ export function ThemeToggle() {
     });
   };
 
+  const ThemeIcon = theme === "dark" ? Sun : Moon;
+  const themeColor = theme === "dark" ? "text-ucla-gold" : "text-ucla-blue";
+
   return (
     <Button
       variant="outline"
       size="icon"
-      className="w-10 h-10 rounded-full animate-fadeIn z-50 glass"
+      className={`w-10 h-10 rounded-full animate-fadeIn z-50 glass ${themeColor}`}
       onClick={toggleTheme}
     >
-      {theme === "dark" ? (
-        <Sun className="h-5 w-5" />
-      ) : (
-        <Moon className="h-5 w-5" />
-      )}
+      <ThemeIcon className="h-5 w-5" />
     </Button>
   );
 }

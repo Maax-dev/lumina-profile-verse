@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Card } from "@/components/ui/card";
@@ -428,6 +429,7 @@ const Results = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [gridColumns, setGridColumns] = useState(4);
   const [gridRows, setGridRows] = useState(4);
+  const [animationComplete, setAnimationComplete] = useState(false);
   const itemsPerPage = gridColumns * gridRows;
   const totalPages = Math.ceil(sampleData.total / itemsPerPage);
   
@@ -436,6 +438,16 @@ const Results = () => {
   const currentResults = sampleData.results.slice(startIndex, endIndex);
 
   useEffect(() => {
+    // Add entrance animation class to body on mount
+    document.body.classList.add('results-page-enter');
+    
+    // Set animation as complete after timeout
+    const timer = setTimeout(() => {
+      setAnimationComplete(true);
+      document.body.classList.remove('results-page-enter');
+    }, 1500); // Match this to the animation duration
+    
+    // Store search in history
     const history = JSON.parse(localStorage.getItem("searchHistory") || "[]");
     const newSearch = {
       id: Date.now().toString(),
@@ -446,17 +458,19 @@ const Results = () => {
     
     const updatedHistory = [newSearch, ...history.slice(0, 9)];
     localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
+    
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ucla-blue to-ucla-gold p-4">
+    <div className="min-h-screen p-4 bg-background overflow-hidden">
       <ThemeToggle />
       
-      <header className="max-w-6xl mx-auto py-8 animate-fadeIn">
+      <header className="max-w-6xl mx-auto py-8 animate-fadeAndSlideUp">
         <div className="flex items-center justify-between mb-4">
           <Link 
             to="/" 
-            className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-ucla-blue to-ucla-gold hover:opacity-90 transition-opacity"
+            className="inline-flex items-center px-4 py-2 rounded-lg ucla-button-light dark:ucla-button-dark"
           >
             <ChevronLeft className="mr-2 h-4 w-4 text-white" />
             <span className="text-white font-medium">Back to Search</span>
@@ -467,7 +481,7 @@ const Results = () => {
           </Link>
         </div>
         
-        <div className="glass p-6 rounded-lg shadow-lg">
+        <div className="glass p-6 rounded-lg shadow-lg animate-scaleIn">
           <div className="flex items-center gap-4">
             <Avatar className="h-12 w-12">
               <AvatarImage src="/joe-bruin.png" alt="Joe Bruin" />
@@ -495,8 +509,12 @@ const Results = () => {
             gridTemplateRows: `repeat(${gridRows}, minmax(0, 1fr))`
           }}
         >
-          {currentResults.map((result) => (
-            <div key={result.profile.id} className="animate-fadeIn">
+          {currentResults.map((result, idx) => (
+            <div 
+              key={result.profile.id} 
+              className={`animate-fadeAndSlideUp`}
+              style={{ animationDelay: `${100 + idx * 50}ms` }}
+            >
               <AlumniCard 
                 profile={result.profile}
                 education={result.education}
@@ -506,7 +524,7 @@ const Results = () => {
           ))}
         </div>
         
-        <Pagination className="mt-8">
+        <Pagination className="mt-8 animate-fadeAndSlideUp" style={{ animationDelay: "600ms" }}>
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious 

@@ -32,56 +32,45 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
 
   return (
     <Card 
-      className="group relative overflow-hidden transition-all duration-300 cursor-pointer bg-white/10 backdrop-blur-sm border border-white hover:border-white/40"
-      style={{ height: "100px", minHeight: "100px", maxHeight: "100px" }}
+      className="group relative overflow-hidden transition-all duration-300 cursor-pointer hover:shadow-xl"
+      style={{ height: "100px" }}
       onClick={() => navigate(`/profile/${profile.id}`, { state: { profile, education, experience } })}
     >
       <CardContent className="p-4 h-full">
-        <div className="flex flex-col h-full relative">
-          {/* Always visible content */}
-          <div className="flex items-center gap-3 min-h-[48px]">
-            <Avatar className="h-10 w-10 shrink-0 ring-2 ring-white/20 transition-all duration-300 group-hover:ring-4">
+        {/* Basic info shown by default */}
+        <div className="flex flex-col h-full">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10 ring-2 ring-primary/30 transition-all duration-300 group-hover:ring-primary">
               <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
               <AvatarFallback>{profile.name[0]}</AvatarFallback>
             </Avatar>
             <div className="min-w-0">
-              <h3 className="font-medium text-sm text-white truncate group-hover:underline">{profile.name}</h3>
-              <p className="text-xs text-white/70 truncate">Class of {graduationYear}</p>
+              <h3 className="font-medium text-sm truncate">{profile.name}</h3>
+              <p className="text-xs text-muted-foreground truncate">Class of {graduationYear}</p>
             </div>
           </div>
           
           <div className="mt-2">
-            <p className="text-sm text-white/70 flex items-center gap-1 truncate">
+            <p className="text-xs flex items-center gap-1 text-muted-foreground truncate">
               <MapPin className="h-3 w-3 shrink-0" /> {profile.location}
             </p>
           </div>
+        </div>
 
-          {/* Expandable content on hover */}
-          <div className="absolute top-0 left-0 w-full h-full pt-4 pl-4 pr-4 pb-4 bg-gradient-to-b from-black/40 to-black/60 backdrop-blur-sm translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-[35%] overflow-hidden">
-            <div className="flex items-center gap-3 min-h-[48px] mb-3">
-              <Avatar className="h-10 w-10 shrink-0 ring-2 ring-white/20">
-                <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
-                <AvatarFallback>{profile.name[0]}</AvatarFallback>
-              </Avatar>
-              <div className="min-w-0">
-                <h3 className="font-medium text-sm text-white truncate">{profile.name}</h3>
-                <p className="text-xs text-white/70 truncate">Class of {graduationYear}</p>
+        {/* Extended info that slides up on hover */}
+        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-b from-primary/90 to-primary/80 backdrop-blur-sm translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0 p-4 border-t border-white/10">
+          <div className="space-y-2">
+            <p className="text-xs text-white truncate">
+              {education[0]?.degree} in {education[0]?.field_of_study}
+            </p>
+            {experience[0] && (
+              <div className="flex items-center gap-2">
+                <Briefcase className="h-3 w-3 text-white/70 shrink-0" />
+                <p className="text-xs text-white truncate">
+                  {experience[0].title} at {experience[0].company_name}
+                </p>
               </div>
-            </div>
-            
-            <div className="space-y-2 mt-2">
-              <p className="text-xs text-white/70 truncate">
-                {education[0]?.degree} in {education[0]?.field_of_study}
-              </p>
-              {experience[0] && (
-                <div className="flex items-center gap-2">
-                  <Briefcase className="h-3 w-3 text-white/70 shrink-0" />
-                  <p className="text-sm text-white/70 truncate">
-                    {experience[0].title} at {experience[0].company_name}
-                  </p>
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
       </CardContent>

@@ -22,16 +22,16 @@ const Index = () => {
       <section className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-background z-0" />
         <div className="animate-flow-gradient absolute inset-0 bg-gradient-to-r from-ucla-blue/10 via-ucla-gold/5 to-ucla-blue/10 z-[-1]"></div>
-        <div className="relative z-10 text-center space-y-8 max-w-4xl mx-auto animate-fadeIn">
+        <div className="relative z-10 text-center space-y-8 max-w-4xl mx-auto animate-fadeAndSlideUp">
           <div className="mb-8">
             <div className="flex items-center justify-center mb-6">
               <img 
                 src="/joe-bruin.png" 
                 alt="Joe Bruin" 
-                className="w-20 h-20"
+                className="w-20 h-20 animate-scaleIn"
               />
               <div className="relative ml-4">
-                <svg className="w-36 h-16" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-36 h-16 animate-scaleIn delay-200" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M20 10H10V50H20V35H30V50H40V10H30V25H20V10Z" className="fill-ucla-blue dark:fill-ucla-lighter-blue" />
                   <path d="M50 10H60V40H80V50H50V10Z" className="fill-ucla-blue dark:fill-ucla-lighter-blue" />
                   <path d="M90 10H100V40H110V10H120V50H80V40H90V10Z" className="fill-ucla-blue dark:fill-ucla-lighter-blue" />
@@ -39,14 +39,16 @@ const Index = () => {
                 </svg>
               </div>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold text-ucla-blue dark:text-ucla-lighter-blue mb-4">
+            <h1 className="text-5xl md:text-7xl font-bold ucla-gradient-light dark:ucla-gradient-dark mb-4 animate-fadeAndSlideUp delay-300">
               Linkd
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground">
+            <p className="text-xl md:text-2xl text-muted-foreground animate-fadeAndSlideUp delay-400">
               Connect with UCLA's Exceptional Alumni Network
             </p>
           </div>
-          <SearchBox />
+          <div className="animate-fadeAndSlideUp delay-500">
+            <SearchBox />
+          </div>
         </div>
       </section>
     </div>

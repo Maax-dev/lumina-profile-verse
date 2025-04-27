@@ -100,9 +100,74 @@
     }
   }
 
+  /* Animation keyframes for transitions */
+  @keyframes fadeAndSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInFromRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .animate-fadeAndSlideUp {
+    animation: fadeAndSlideUp 0.6s ease forwards;
+  }
+
+  .animate-scaleIn {
+    animation: scaleIn 0.5s ease forwards;
+  }
+
+  .animate-slideInFromRight {
+    animation: slideInFromRight 0.5s ease forwards;
+  }
+
   .animate-flow-gradient {
     animation: flow-gradient 15s ease infinite;
     background-size: 200% 200%;
+  }
+
+  /* Different animation delays for staggered effects */
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .delay-500 {
+    animation-delay: 500ms;
   }
 
   .glass {
@@ -123,9 +188,18 @@
 }
 
 .ucla-gradient-light {
-  @apply bg-gradient-to-r from-ucla-blue to-ucla-gold bg-clip-text;
+  @apply bg-gradient-to-r from-ucla-blue to-ucla-gold text-transparent bg-clip-text;
 }
 
 .ucla-gradient-dark {
-  @apply bg-gradient-to-r from-ucla-darkest-blue to-ucla-darker-gold bg-clip-text;
+  @apply bg-gradient-to-r from-ucla-darkest-blue to-ucla-darker-gold text-transparent bg-clip-text;
+}
+
+/* Themed buttons and UI elements */
+.ucla-button-light {
+  @apply bg-gradient-to-r from-ucla-blue to-ucla-lighter-blue text-white hover:opacity-90 transition-opacity;
+}
+
+.ucla-button-dark {
+  @apply bg-gradient-to-r from-ucla-darkest-blue to-ucla-darker-blue text-white hover:opacity-90 transition-opacity;
 }
