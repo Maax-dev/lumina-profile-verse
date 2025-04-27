@@ -25,36 +25,53 @@ const MOCK_SEARCH_RESULTS = {
   response: {
     results: [
       {
-        id: "1",
-        name: "Jane Smith",
-        title: "Software Engineer",
-        company: "Tech Solutions Inc.",
-        location: "San Francisco, CA",
+        profile: {
+          id: "1",
+          name: "Jane Smith",
+          title: "Software Engineer",
+          company: "Tech Solutions Inc.",
+          location: "San Francisco, CA",
+          headline: "Experienced Software Engineer",
+          description: "Passionate about creating user-friendly applications",
+          profile_picture_url: "https://i.pravatar.cc/150?img=1",
+          linkedin_url: "https://linkedin.com/in/janesmith"
+        },
         education: [{ school: "UCLA", degree: "Computer Science", year: "2020" }],
-        skills: ["React", "TypeScript", "Node.js"],
-        image: "https://i.pravatar.cc/150?img=1"
+        experience: [{ title: "Software Engineer", company: "Tech Solutions Inc." }]
       },
       {
-        id: "2",
-        name: "John Doe",
-        title: "Product Manager",
-        company: "Innovation Labs",
-        location: "New York, NY",
+        profile: {
+          id: "2",
+          name: "John Doe",
+          title: "Product Manager",
+          company: "Innovation Labs",
+          location: "New York, NY",
+          headline: "Strategic Product Manager",
+          description: "Focused on user-centric product development",
+          profile_picture_url: "https://i.pravatar.cc/150?img=2",
+          linkedin_url: "https://linkedin.com/in/johndoe"
+        },
         education: [{ school: "UCLA", degree: "Business Administration", year: "2018" }],
-        skills: ["Product Strategy", "Agile", "Market Research"],
-        image: "https://i.pravatar.cc/150?img=2"
+        experience: [{ title: "Product Manager", company: "Innovation Labs" }]
       },
       {
-        id: "3",
-        name: "Emily Johnson",
-        title: "Data Scientist",
-        company: "Data Insights Corp",
-        location: "Boston, MA",
+        profile: {
+          id: "3",
+          name: "Emily Johnson",
+          title: "Data Scientist",
+          company: "Data Insights Corp",
+          location: "Boston, MA",
+          headline: "Data Scientist & AI Specialist",
+          description: "Applying machine learning to solve business problems",
+          profile_picture_url: "https://i.pravatar.cc/150?img=3",
+          linkedin_url: "https://linkedin.com/in/emilyjohnson"
+        },
         education: [{ school: "UCLA", degree: "Statistics", year: "2021" }],
-        skills: ["Python", "Machine Learning", "Data Analysis"],
-        image: "https://i.pravatar.cc/150?img=3"
+        experience: [{ title: "Data Scientist", company: "Data Insights Corp" }]
       }
-    ]
+    ],
+    total: 3,
+    query: "sample query"
   }
 };
 
@@ -105,6 +122,15 @@ export function SearchBox() {
         }
         
         searchData = await response.json();
+        
+        // Validate the response structure
+        if (!searchData || 
+            (!searchData.response && !searchData.results) || 
+            (searchData.response && !Array.isArray(searchData.response.results)) ||
+            (!Array.isArray(searchData.results) && !searchData.response)) {
+          console.error("Invalid API response format:", searchData);
+          throw new Error("Invalid API response format");
+        }
       } catch (error) {
         console.error("API Error:", error);
         // Use mock data when API fails
@@ -121,7 +147,7 @@ export function SearchBox() {
         id: timestamp,
         query: isNLP ? data.nlpQuery : `${data.keys} ${data.loc} ${data.alum}`.trim(),
         timestamp,
-        results: searchData.response?.results?.length || 0
+        results: searchData.response?.results?.length || searchData.results?.length || 0
       };
 
       const existingHistory = JSON.parse(localStorage.getItem("searchHistory") || "[]");
@@ -129,15 +155,20 @@ export function SearchBox() {
 
       navigate(`/results?${params.toString()}`, { state: { searchData, endpoint } });
       
-      if (!searchData.response || searchData === MOCK_SEARCH_RESULTS) {
+      if (!searchData.response?.results?.length && !searchData.results?.length) {
+        toast({
+          title: "No Results",
+          description: "No alumni matching your criteria were found",
+        });
+      } else if (searchData === MOCK_SEARCH_RESULTS) {
         toast({
           title: "Demo Mode",
           description: "Showing sample alumni data",
         });
       } else {
         toast({
-          title: "Searching...",
-          description: "Finding alumni matching your criteria",
+          title: "Search Results",
+          description: `Found ${searchData.response?.results?.length || searchData.results?.length || 0} matching alumni`,
         });
       }
     } catch (error) {

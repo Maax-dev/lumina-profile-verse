@@ -87,9 +87,9 @@ const Results = () => {
             queryString = new URLSearchParams({ keys, loc, alum }).toString();
           }
 
-          console.log(`Fetching from: http://127.0.0.1:5000${usedEndpoint}?${queryString}`);
+          console.log(`Fetching from: ${usedEndpoint}?${queryString}`);
 
-          const response = await fetch(`http://127.0.0.1:5000${usedEndpoint}?${queryString}`, {
+          const response = await fetch(`${usedEndpoint}?${queryString}`, {
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
@@ -137,9 +137,17 @@ const Results = () => {
     return () => clearTimeout(timer);
   }, [searchParams, toast, location.state, usedEndpoint]);
 
+  // Extract data safely with fallbacks
   const displayData = searchData || { results: [], total: 0, query: "" };
+  // Ensure resultsArray is always an array, even if data structure is unexpected
   const resultsArray = displayData.results || [];
-  const uniqueResults = Array.from(new Map(resultsArray.map(item => [item.profile.id, item])).values());
+  
+  // Filter out any invalid results (those without a valid profile.id)
+  const validResults = resultsArray.filter(item => item && item.profile && item.profile.id);
+  
+  // Create unique results using the filtered valid results array
+  const uniqueResults = Array.from(new Map(validResults.map(item => [item.profile.id, item])).values());
+  
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentResults = uniqueResults.slice(startIndex, endIndex);
@@ -193,7 +201,7 @@ const Results = () => {
             <div>
               <h1 className="text-2xl font-bold">{searchQuery || "Search results"}</h1>
               <p className="text-muted-foreground mt-1">
-                Found {displayData.total || resultsArray.length} matching alumni
+                Found {uniqueResults.length} matching alumni
               </p>
             </div>
           </div>
@@ -207,6 +215,14 @@ const Results = () => {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {uniqueResults.length === 0 && !isLoading && !error && (
+          <Alert variant="default" className="mb-6">
+            <Info className="h-4 w-4" />
+            <AlertTitle>No results found</AlertTitle>
+            <AlertDescription>Try modifying your search criteria</AlertDescription>
           </Alert>
         )}
 
@@ -251,7 +267,7 @@ const Results = () => {
           </div>
         )}
 
-        {resultsArray.length > 0 && (
+        {uniqueResults.length > 0 && (
           <Pagination className="mt-8 animate-fadeAndSlideUp" style={{ animationDelay: "600ms" }}>
             <PaginationContent>
               <PaginationItem>

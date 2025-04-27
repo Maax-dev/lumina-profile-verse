@@ -13,6 +13,7 @@ export default defineConfig(({ mode }) => ({
       "/getPeople": {
         target: "https://api.lovable.dev",  // Using a mock API endpoint
         changeOrigin: true,
+        rewrite: (path) => path,
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
             console.log('proxy error', err);
@@ -28,10 +29,12 @@ export default defineConfig(({ mode }) => ({
       "/getPeopleByNLP": {
         target: "https://api.lovable.dev",  // Using a mock API endpoint
         changeOrigin: true,
+        rewrite: (path) => path,
       },
       "/getHistory": {
         target: "https://api.lovable.dev",  // Using a mock API endpoint
         changeOrigin: true,
+        rewrite: (path) => path,
       },
     },
   },
