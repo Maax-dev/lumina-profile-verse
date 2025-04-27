@@ -11,29 +11,27 @@ export function SearchBox() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching for:", query);
-    
     if (query.trim()) {
       navigate("/results");
     }
   };
 
   return (
-    <form onSubmit={handleSearch} className="w-full max-w-2xl animate-fadeIn">
+    <form onSubmit={handleSearch} className="w-full">
       <div className="relative flex items-center">
         <Input
           type="text"
           placeholder="Find software alumni from SJSU in LA..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full h-12 pl-4 pr-12 text-lg bg-background border-2 border-primary/20 focus:border-primary rounded-lg placeholder:text-muted-foreground/50"
+          className="w-full h-14 pl-6 pr-14 text-lg bg-background/20 backdrop-blur-sm border-2 border-white/20 focus:border-white/40 rounded-2xl placeholder:text-white/70 text-white"
         />
         <Button
           type="submit"
           size="icon"
-          className="absolute right-2 w-8 h-8 rounded-md"
+          className="absolute right-3 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20"
         >
-          <Search className="h-4 w-4" />
+          <Search className="h-5 w-5 text-white" />
         </Button>
       </div>
     </form>

@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -92,6 +91,14 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
         },
+        shimmer: {
+          "0%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "200% 0" }
+        },
+        "bounce-slow": {
+          "0%, 100%": { transform: "translateY(-1%)" },
+          "50%": { transform: "translateY(1%)" }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -99,6 +106,8 @@ export default {
         fadeIn: "fadeIn 0.5s ease-out forwards",
         slideIn: "slideIn 0.3s ease-out forwards",
         glow: "glow 2s ease-in-out infinite",
+        shimmer: "shimmer 8s linear infinite",
+        "bounce-slow": "bounce-slow 4s ease-in-out infinite"
       },
     },
   },
