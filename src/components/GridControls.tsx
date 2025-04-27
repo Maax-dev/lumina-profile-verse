@@ -23,7 +23,7 @@ export function GridControls({ onGridChange }: GridControlsProps) {
   return (
     <div className="space-y-4 mb-6 p-4 rounded-lg border bg-card/50 backdrop-blur-sm">
       <div className="flex items-center gap-4">
-        <span className="text-sm font-medium text-white min-w-[100px]">Columns: {columns}</span>
+        <span className="text-sm font-medium text-foreground min-w-[100px]">Columns: {columns}</span>
         <Slider
           defaultValue={[4]}
           max={5}
@@ -35,10 +35,10 @@ export function GridControls({ onGridChange }: GridControlsProps) {
       </div>
       
       <div className="flex items-center gap-4">
-        <span className="text-sm font-medium text-white min-w-[100px]">Rows: {rows}</span>
+        <span className="text-sm font-medium text-foreground min-w-[100px]">Rows: {rows}</span>
         <Slider
           defaultValue={[4]}
-          max={6}
+          max={5}
           min={1}
           step={1}
           onValueChange={handleRowChange}

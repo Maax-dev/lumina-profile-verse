@@ -11,9 +11,9 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 206 64% 42%;      /* UCLA Blue #2774AE - lighter for light mode */
+    --primary: 206 64% 42%;      /* UCLA Blue #2774AE - darker for light mode */
     --primary-foreground: 210 40% 98%;
-    --secondary: 48 100% 50%;    /* UCLA Gold #FFD100 - lighter for light mode */
+    --secondary: 48 100% 50%;    /* UCLA Gold #FFD100 - darker for light mode */
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -34,9 +34,9 @@
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
-    --primary: 201 100% 18%;    /* Darkest Blue #003B5C - darker for dark mode */
+    --primary: 206 86% 62%;      /* Lighter UCLA Blue - lighter for dark mode */
     --primary-foreground: 210 40% 98%;
-    --secondary: 45 100% 55%;   /* Darker Gold #FFC72C - darker for dark mode */
+    --secondary: 48 100% 60%;    /* Lighter UCLA Gold - lighter for dark mode */
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
@@ -46,7 +46,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 201 100% 18%;
+    --ring: 206 86% 62%;
   }
 
   * {
@@ -73,7 +73,7 @@
   }
 
   .dark body::before {
-    background: linear-gradient(135deg, rgba(0, 59, 92, 0.2), rgba(255, 199, 44, 0.1));
+    background: linear-gradient(135deg, rgba(139, 184, 232, 0.15), rgba(255, 199, 44, 0.1));
   }
 
   @keyframes gradientFlow {
@@ -188,18 +188,18 @@
 }
 
 .ucla-gradient-light {
-  @apply bg-gradient-to-r from-ucla-blue to-ucla-gold text-transparent bg-clip-text;
+  @apply bg-gradient-to-r from-ucla-darkest-blue to-ucla-darkest-gold text-transparent bg-clip-text;
 }
 
 .ucla-gradient-dark {
-  @apply bg-gradient-to-r from-ucla-darkest-blue to-ucla-darker-gold text-transparent bg-clip-text;
+  @apply bg-gradient-to-r from-ucla-lighter-blue to-ucla-gold text-transparent bg-clip-text;
 }
 
 /* Themed buttons and UI elements */
 .ucla-button-light {
-  @apply bg-gradient-to-r from-ucla-blue to-ucla-lighter-blue text-white hover:opacity-90 transition-opacity;
+  @apply bg-gradient-to-r from-ucla-darkest-blue to-ucla-darker-blue text-white hover:opacity-90 transition-opacity;
 }
 
 .ucla-button-dark {
-  @apply bg-gradient-to-r from-ucla-darkest-blue to-ucla-darker-blue text-white hover:opacity-90 transition-opacity;
+  @apply bg-gradient-to-r from-ucla-lighter-blue to-ucla-blue text-white hover:opacity-90 transition-opacity;
 }

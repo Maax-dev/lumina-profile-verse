@@ -31,7 +31,8 @@ export function ThemeToggle() {
   };
 
   const ThemeIcon = theme === "dark" ? Sun : Moon;
-  const themeColor = theme === "dark" ? "text-ucla-gold" : "text-ucla-blue";
+  // Use lighter gold in dark mode, darker blue in light mode
+  const themeColor = theme === "dark" ? "text-ucla-darker-gold hover:text-ucla-gold" : "text-ucla-darkest-blue hover:text-ucla-blue";
 
   return (
     <Button
