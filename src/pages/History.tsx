@@ -4,14 +4,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { History as HistoryIcon } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "@/hooks/use-toast";
 
 interface SearchHistory {
-  id: string;
   query: string;
-  timestamp: string;
-  results: number;
+  total: number;
+  source: string; // ✅ /getPeople or /getPeopleByNLP
+  result: any[];  // ✅ the full list of alumni
 }
 
 export default function History() {
@@ -22,22 +21,12 @@ export default function History() {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const localHistory = JSON.parse(localStorage.getItem("searchHistory") || "[]");
-        
-        const response = await fetch("/getHistory");
+        const response = await fetch("http://127.0.0.1:5000/getHistory"); // ✅ Corrected URL
         if (!response.ok) {
           throw new Error("Failed to fetch history");
         }
         const backendHistory = await response.json();
-        
-        const combinedHistory = [...localHistory, ...backendHistory]
-          .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-        
-        const uniqueHistory = Array.from(
-          new Map(combinedHistory.map(item => [item.id, item])).values()
-        );
-        
-        setSearchHistory(uniqueHistory);
+        setSearchHistory(backendHistory);
       } catch (error) {
         console.error("Error fetching history:", error);
         toast({
@@ -53,8 +42,19 @@ export default function History() {
     fetchHistory();
   }, []);
 
-  const handleHistoryClick = (query: string) => {
-    navigate(`/results?q=${encodeURIComponent(query)}`);
+  const handleHistoryClick = (item: SearchHistory) => {
+    console.log("Navigating from history:", item);
+
+    navigate("/results", {
+      state: {
+        searchData: {
+          results: item.result || [],
+          total: item.total,
+          query: item.query
+        },
+        endpoint: item.source // ✅ important: preserve the correct endpoint!
+      }
+    });
   };
 
   return (
@@ -89,10 +89,10 @@ export default function History() {
         </div>
 
         <div className="space-y-4">
-          {searchHistory.map((item) => (
+          {searchHistory.map((item, idx) => (
             <div 
-              key={item.id} 
-              onClick={() => handleHistoryClick(item.query)}
+              key={idx}
+              onClick={() => handleHistoryClick(item)}
               className="cursor-pointer"
             >
               <Card className="hover:bg-accent/5 transition-colors hover:scale-105">
@@ -101,7 +101,7 @@ export default function History() {
                     <div>
                       <p className="font-medium">{item.query}</p>
                       <p className="text-sm text-muted-foreground">
-                        {item.results} results • {new Date(item.timestamp).toLocaleDateString()}
+                        {item.total} results • {item.source === "/getPeopleByNLP" ? "NLP Search" : "Standard Search"}
                       </p>
                     </div>
                     <HistoryIcon className="h-5 w-5 text-muted-foreground" />
@@ -111,7 +111,7 @@ export default function History() {
             </div>
           ))}
           
-          {searchHistory.length === 0 && (
+          {searchHistory.length === 0 && !isLoading && (
             <div className="text-center py-12 text-muted-foreground">
               <HistoryIcon className="h-12 w-12 mx-auto mb-4" />
               <p>No search history yet</p>
