@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,6 @@ type SearchFormValues = z.infer<typeof searchSchema>;
 
 export function SearchBox() {
   const navigate = useNavigate();
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isNLP, setIsNLP] = useState(false);
 
   const form = useForm<SearchFormValues>({
@@ -95,7 +95,7 @@ export function SearchBox() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl mx-auto">
-        <div className="relative"
+        <div className="relative p-1"
           style={{
             borderWidth: '2px',
             borderImageSlice: '1',
@@ -103,14 +103,14 @@ export function SearchBox() {
             borderImage: 'linear-gradient(90deg, var(--ucla-blue) 50%, var(--ucla-gold) 50%) 1',
             borderRadius: '1.5rem',
           }}>
-          <div className={`flex flex-col gap-6 p-6`}>
+          <div className={`flex flex-col gap-6 p-6 min-h-[320px]`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Switch
                   checked={isNLP}
                   onCheckedChange={setIsNLP}
                   id="nlp-mode"
-                  className="data-[state=checked]:bg-ucla-gold data-[state=checked]:dark:bg-ucla-gold/80"
+                  className="data-[state=checked]:bg-ucla-gold data-[state=checked]:dark:bg-ucla-lighter-blue data-[state=unchecked]:bg-gray-200 dark:data-[state=unchecked]:bg-gray-700"
                 />
                 <FormLabel htmlFor="nlp-mode" className="text-sm font-medium">
                   {isNLP ? "NLP Search" : "Standard Search"}
@@ -118,7 +118,7 @@ export function SearchBox() {
               </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 flex-grow">
               {isNLP ? (
                 <FormField
                   control={form.control}
@@ -165,7 +165,7 @@ export function SearchBox() {
                           <FormControl>
                             <Input 
                               placeholder="Enter location..." 
-                              className="h-12 bg-background/20 backdrop-blur-sm rounded-xl"
+                              className="h-14 bg-background/20 backdrop-blur-sm rounded-xl"
                               {...field}
                             />
                           </FormControl>
@@ -182,7 +182,7 @@ export function SearchBox() {
                           <FormControl>
                             <Input
                               placeholder="Enter university name..."
-                              className="h-12 bg-background/20 backdrop-blur-sm rounded-xl"
+                              className="h-14 bg-background/20 backdrop-blur-sm rounded-xl"
                               {...field}
                             />
                           </FormControl>
@@ -192,16 +192,16 @@ export function SearchBox() {
                   </div>
                 </>
               )}
+            </div>
 
-              <div className="flex justify-center">
-                <Button 
-                  type="submit"
-                  size="icon"
-                  className="w-12 h-12 rounded-full bg-ucla-blue hover:bg-ucla-blue/90 dark:bg-ucla-lighter-blue dark:hover:bg-ucla-lighter-blue/90 text-white"
-                >
-                  <Search className="h-5 w-5" />
-                </Button>
-              </div>
+            <div className="flex justify-center mt-4">
+              <Button 
+                type="submit"
+                size="icon"
+                className="w-12 h-12 rounded-full bg-ucla-blue hover:bg-ucla-blue/90 dark:bg-ucla-lighter-blue dark:hover:bg-ucla-lighter-blue/90 text-white"
+              >
+                <Search className="h-5 w-5" />
+              </Button>
             </div>
           </div>
         </div>
