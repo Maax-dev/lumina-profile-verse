@@ -7,6 +7,7 @@ import { ChevronLeft, History as HistoryIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AlumniCard } from "@/components/AlumniCard";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Mock data for alumni results
 const sampleData = {
