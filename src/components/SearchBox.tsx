@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Search, Loader } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -22,6 +22,7 @@ type SearchFormValues = z.infer<typeof searchSchema>;
 export function SearchBox() {
   const navigate = useNavigate();
   const [isNLP, setIsNLP] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<SearchFormValues>({
     resolver: zodResolver(searchSchema),
@@ -34,6 +35,7 @@ export function SearchBox() {
   });
 
   const onSubmit = async (data: SearchFormValues) => {
+    setIsLoading(true);
     let endpoint = '/getPeople';
     let params = new URLSearchParams();
 
@@ -53,7 +55,7 @@ export function SearchBox() {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        }
+        } 
       });
 
       if (!response.ok) {
@@ -73,7 +75,6 @@ export function SearchBox() {
       const existingHistory = JSON.parse(localStorage.getItem("searchHistory") || "[]");
       localStorage.setItem("searchHistory", JSON.stringify([historyItem, ...existingHistory]));
 
-      // ✅ Updated: Also pass endpoint
       navigate(`/results?${params.toString()}`, { state: { searchData, endpoint } });
 
       toast({
@@ -87,6 +88,8 @@ export function SearchBox() {
         description: "Failed to fetch alumni data. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -206,9 +209,14 @@ export function SearchBox() {
               <Button 
                 type="submit"
                 size="icon"
+                disabled={isLoading}
                 className="w-12 h-12 rounded-full bg-ucla-blue hover:bg-ucla-blue/90 dark:bg-ucla-lighter-blue dark:hover:bg-ucla-lighter-blue/90 text-white"
               >
-                <Search className="h-5 w-5" />
+                {isLoading ? (
+                  <Loader className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Search className="h-5 w-5" />
+                )}
               </Button>
             </div>
           </div>

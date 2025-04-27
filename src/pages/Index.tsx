@@ -20,7 +20,7 @@ const Index = () => {
             </span>
           </h1>
           <p className="text-xl md:text-2xl dark:text-white/90 text-foreground/90 animate-fadeIn">
-            Connect with UCLA Alumni
+            Search less. Connect more
           </p>
         </div>
         

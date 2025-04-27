@@ -2,59 +2,11 @@ from groq import Groq
 import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import spacy
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 history = dict()
-
-# Load SpaCy small English model
-nlp = spacy.load("en_core_web_sm")
-
-def extract_filters_from_statement(statement):
-    filters = {}
-    doc = nlp(statement)
-    for ent in doc.ents:
-        if ent.label_ == "GPE":  # Location
-            filters["location"] = ent.text
-        elif ent.label_ == "ORG":  # Company
-            filters["company_name"] = ent.text
-        elif ent.label_ == "DATE":
-            if ent.text.isdigit() and len(ent.text) == 4:
-                filters["graduation_year"] = int(ent.text)
-        elif ent.label_ == "PERSON":
-            filters["name"] = ent.text
-        elif ent.label_ in {"WORK_OF_ART", "PRODUCT", "EVENT"}:
-            filters["title"] = ent.text
-    return filters
-
-def matches_filters(person, filters):
-    match = True
-    
-    if "location" in filters:
-        profile_location = (person.get('profile', {}).get('location') or '')
-        match = match and filters["location"].lower() in profile_location.lower()
-
-    if "company_name" in filters:
-        experiences = person.get('experience', [])
-        company_match = False
-        for exp in experiences:
-            if filters["company_name"].lower() in (exp.get('company_name') or '').lower():
-                company_match = True
-                break
-        match = match and company_match
-
-    if "graduation_year" in filters:
-        educations = person.get('education', [])
-        if educations:
-            latest_edu = max(educations, key=lambda e: e.get('end_date') or "0000")
-            latest_year = (latest_edu.get('end_date') or "")[:4]
-            match = match and str(filters["graduation_year"]) == latest_year
-        else:
-            match = False
-
-    return match
 
 @app.route("/getPeopleByNLP", methods=["GET"])
 def getPeopleByNLP():
@@ -87,28 +39,15 @@ def getPeopleByNLP():
     }
 
     response = requests.get(url, headers=headers, params=params)
-    raw_data = response.json()
 
-    extracted_filters = extract_filters_from_statement(statement)
-    print("Extracted Filters:", extracted_filters)
-
-    people = raw_data.get('results', [])
-    filtered_people = [person for person in people if matches_filters(person, extracted_filters)]
-
-    history[query] = {
-        "results": filtered_people,
-        "total": len(filtered_people),
-        "query": statement,
-        "endpoint_used": "/getPeopleByNLP"
-    }
-
-    return jsonify({
-        "response": {
-            "results": filtered_people,
-            "total": len(filtered_people),
-            "query": statement
-        }
-    })
+    print(history)
+    try:
+        history[query] = response.json()
+        return jsonify({"response": response.json()})
+    except ValueError:
+        return jsonify({"response": response.text})
+    
+    
 
 @app.route("/getPeople", methods=["GET"])
 def getPeople():
