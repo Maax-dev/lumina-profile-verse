@@ -32,55 +32,54 @@ export function AlumniCard({ profile, education, experience }: AlumniCardProps) 
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Card className="w-full hover:scale-[1.02] transition-all duration-200 cursor-pointer">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <Card className="w-[280px] hover:scale-[1.02] transition-all duration-200 cursor-pointer">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
               <Avatar className="h-10 w-10">
                 <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
                 <AvatarFallback>{profile.name[0]}</AvatarFallback>
               </Avatar>
-              <div className="flex flex-col">
-                <h3 className="font-medium">{profile.name}</h3>
-                <p className="text-sm text-muted-foreground">Class of {graduationYear}</p>
+              <div>
+                <h3 className="font-medium text-sm">{profile.name}</h3>
+                <p className="text-xs text-muted-foreground">Class of {graduationYear}</p>
               </div>
             </div>
-            <ChevronUp className="h-4 w-4 text-muted-foreground" />
           </CardContent>
         </Card>
       </HoverCardTrigger>
       
-      <HoverCardContent className="w-80 p-0">
-        <div className="p-4 pb-2 bg-primary/5">
-          <div className="flex gap-4 items-start">
+      <HoverCardContent className="w-80">
+        <div className="space-y-4">
+          <div className="flex items-start gap-4">
             <Avatar className="h-12 w-12">
               <AvatarImage src={profile.profile_picture_url} alt={profile.name} />
               <AvatarFallback>{profile.name[0]}</AvatarFallback>
             </Avatar>
             <div>
               <h4 className="font-semibold">{profile.name}</h4>
-              <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+              <p className="text-sm text-muted-foreground flex items-center gap-1">
                 <MapPin className="h-3 w-3" /> {profile.location}
               </p>
+              <p className="text-sm mt-1">{profile.headline}</p>
             </div>
           </div>
-          <p className="text-sm mt-2">{profile.headline}</p>
-        </div>
-        
-        {experience[0] && (
-          <div className="px-4 py-2 flex items-center gap-2 border-t">
-            <Avatar className="h-6 w-6">
-              <AvatarImage src={experience[0].company_logo} alt={experience[0].company_name} />
-              <AvatarFallback><Briefcase className="h-4 w-4" /></AvatarFallback>
-            </Avatar>
-            <div className="text-sm">
-              <p className="font-medium">{experience[0].title}</p>
-              <p className="text-muted-foreground">{experience[0].company_name}</p>
+          
+          {experience[0] && (
+            <div className="flex items-center gap-3 pt-2 border-t">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={experience[0].company_logo} alt={experience[0].company_name} />
+                <AvatarFallback><Briefcase className="h-4 w-4" /></AvatarFallback>
+              </Avatar>
+              <div className="text-sm">
+                <p className="font-medium">{experience[0].title}</p>
+                <p className="text-muted-foreground">{experience[0].company_name}</p>
+              </div>
             </div>
+          )}
+          
+          <div className="text-xs text-muted-foreground pt-2 border-t">
+            {education[0]?.degree} in {education[0]?.field_of_study}
           </div>
-        )}
-        
-        <div className="p-4 pt-2 text-xs text-muted-foreground border-t">
-          {education[0]?.degree} in {education[0]?.field_of_study}
         </div>
       </HoverCardContent>
     </HoverCard>

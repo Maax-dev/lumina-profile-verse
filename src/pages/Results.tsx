@@ -1,10 +1,9 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, History as HistoryIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AlumniCard } from "@/components/AlumniCard";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -427,40 +426,69 @@ const sampleData = {
 
 const Results = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
   const totalPages = Math.ceil(sampleData.total / itemsPerPage);
   
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentResults = sampleData.results.slice(startIndex, endIndex);
 
+  useEffect(() => {
+    const history = JSON.parse(localStorage.getItem("searchHistory") || "[]");
+    const newSearch = {
+      id: Date.now().toString(),
+      query: sampleData.query,
+      timestamp: new Date().toISOString(),
+      results: sampleData.total
+    };
+    
+    const updatedHistory = [newSearch, ...history.slice(0, 9)];
+    localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
+  }, []);
+
   return (
     <div className="min-h-screen bg-background text-foreground p-4">
       <ThemeToggle />
       
-      <header className="max-w-4xl mx-auto py-8 animate-fadeIn">
-        <Link to="/" className="inline-flex items-center text-primary hover:underline mb-4">
-          <ChevronLeft className="mr-2 h-4 w-4" />
-          Back to Search
-        </Link>
+      <header className="max-w-6xl mx-auto py-8 animate-fadeIn">
+        <div className="flex items-center justify-between mb-4">
+          <Link to="/" className="text-primary hover:underline flex items-center">
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Back to Search
+          </Link>
+          <Link to="/history" className="flex items-center gap-2 text-primary hover:underline">
+            <HistoryIcon className="h-4 w-4" />
+            View History
+          </Link>
+        </div>
         
         <div className="glass p-6 rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold">{sampleData.query}</h1>
-          <p className="text-muted-foreground mt-2">Found {sampleData.total} matching alumni</p>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-12 w-12">
+              <AvatarImage src="/joe-bruin.png" alt="Joe Bruin" />
+              <AvatarFallback>JB</AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-2xl font-bold">{sampleData.query}</h1>
+              <p className="text-muted-foreground mt-1">Found {sampleData.total} matching alumni</p>
+            </div>
+          </div>
           <Progress value={(sampleData.total / 100) * 100} className="mt-4 h-2" />
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto mt-8 space-y-4">
-        {currentResults.map((result) => (
-          <div key={result.profile.id} className="animate-fadeIn">
-            <AlumniCard 
-              profile={result.profile}
-              education={result.education}
-              experience={result.experience}
-            />
-          </div>
-        ))}
+      <main className="max-w-6xl mx-auto mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {currentResults.map((result) => (
+            <div key={result.profile.id} className="animate-fadeIn">
+              <AlumniCard 
+                profile={result.profile}
+                education={result.education}
+                experience={result.experience}
+              />
+            </div>
+          ))}
+        </div>
         
         <Pagination className="mt-8">
           <PaginationContent>
